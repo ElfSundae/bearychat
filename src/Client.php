@@ -14,6 +14,13 @@ class Client
     protected $webhook;
 
     /**
+     * The default fields for messages.
+     *
+     * @var array
+     */
+    protected $messageDefaults;
+
+    /**
      * The Guzzle http client.
      *
      * @var \GuzzleHttp\Client
@@ -24,17 +31,16 @@ class Client
      * Create a new Client.
      *
      * @param  string  $webhook
+     * @param  array  $messageDefaults
      * @param  \GuzzleHttp\Client  $httpClient
      */
-    public function __construct($webhook, $httpClient = null)
+    public function __construct($webhook, $messageDefaults = [], $httpClient = null)
     {
         $this->webhook = $webhook;
 
-        $this->httpClient = $httpClient ?: new HttpClient([
-            'headers' => [
-                'Content-Type' => 'application/json'
-            ]
-        ]);
+        $this->configureMessageDefaults($messageDefaults);
+
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -55,6 +61,39 @@ class Client
     public function setWebhook($webhook)
     {
         $this->webhook = $webhook;
+    }
+
+    /**
+     * Get the http client.
+     * @return \GuzzleHttp\Client
+     */
+    protected function getHttpClient()
+    {
+        if (!($this->httpClient instanceof HttpClient)) {
+            $this->httpClient = new HttpClient([
+                'headers' => [
+                    'Content-Type' => 'application/json'
+                ]
+            ]);
+        }
+
+        return $this->httpClient;
+    }
+
+    protected function configureMessageDefaults(array $messageDefaults)
+    {
+        $defaults = [
+            MessageDefaults::MARKDOWN => true,
+        ];
+
+        $this->messageDefaults = $messageDefaults + $defaults;
+    }
+
+    public function getMessageDefaults($option = null)
+    {
+        return is_null($option) ?
+            $this->messageDefaults :
+            (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
     }
 
     /**
@@ -80,7 +119,7 @@ class Client
             $payload = json_encode((array)$payload);
         }
 
-        $response = $this->httpClient->post(
+        $response = $this->getHttpClient()->post(
             $this->getWebhook(),
             ['body' => $payload]
         );
