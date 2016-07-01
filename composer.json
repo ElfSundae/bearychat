@@ -4,7 +4,7 @@
     "keywords": ["bearychat", "laravel", "incoming webhook"],
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/ElfSundae/bearychat",
+    "homepage": "https://github.com/ElfSundae/BearyChat",
     "authors": [
         {
             "name": "Elf Sundae",
@@ -12,14 +12,12 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "ext-mbstring": "*",
+        "php": ">=5.4.0",
         "guzzlehttp/guzzle": "~6.0|~5.3"
     },
     "autoload": {
         "psr-4": {
             "ElfSundae\\BearyChat\\": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
