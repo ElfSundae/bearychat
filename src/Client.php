@@ -58,6 +58,17 @@ class Client
     }
 
     /**
+     * Send message, just alias to `sendPayload`.
+     *
+     * @param  mixed $message  A JSON string, or any arrayable object.
+     * @return boolean
+     */
+    public function sendMessage($message)
+    {
+        return $this->sendPayload($message);
+    }
+
+    /**
      * Send message payload.
      *
      * @param  mixed $payload  A JSON string, or any arrayable object.
