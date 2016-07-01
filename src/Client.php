@@ -74,6 +74,6 @@ class Client
             ['body' => $payload]
         );
 
-        return ($response && 200 === $response->getStatusCode());
+        return (200 === $response->getStatusCode());
     }
 }
