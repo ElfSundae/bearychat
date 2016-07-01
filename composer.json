@@ -1,0 +1,25 @@
+{
+    "name": "elfsundae/bearychat",
+    "description": "A PHP package for sending message to BearyChat with the Incoming Webhook.",
+    "keywords": ["bearychat", "laravel", "incoming webhook"],
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/ElfSundae/bearychat",
+    "authors": [
+        {
+            "name": "Elf Sundae",
+            "email": "elf.sundae@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "~6.0|~5.3",
+    },
+    "autoload": {
+        "psr-4": {
+            "ElfSundae\\BearyChat\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
