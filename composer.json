@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.5.0",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "~6.0|~5.3",
+        "guzzlehttp/guzzle": "~6.0|~5.3"
     },
     "autoload": {
         "psr-4": {
