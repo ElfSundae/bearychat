@@ -363,4 +363,9 @@ class Message
             'attachments' => $this->getAttachments(),
         ];
     }
+
+    public function send()
+    {
+        return $this->client->sendMessage($this);
+    }
 }
