@@ -146,9 +146,9 @@ class Message
      *
      * @return $this
      */
-    public function enableMarkdown()
+    public function enableMarkdown($enable = true)
     {
-        return $this->setMarkdown(true);
+        return $this->setMarkdown($enable);
     }
 
     /**
@@ -242,10 +242,10 @@ class Message
      */
     public function to($target)
     {
-        if (is_null($target)) {
-            $this->setChannel(null);
-            $this->setUser(null);
-        } else {
+        $this->setChannel(null);
+        $this->setUser(null);
+
+        if (!empty($target)) {
             $target = (string)$target;
 
             $mark = mb_substr($target, 0, 1);
@@ -255,7 +255,7 @@ class Message
                 $this->setUser($to);
             } else if ($mark == '#' && !empty($to)) {
                 $this->setChannel($to);
-            } else if (!empty($target)) {
+            } else {
                 $this->setChannel($target);
             }
         }
@@ -279,12 +279,14 @@ class Message
      * @param  mixed  $attachments
      * @return $this
      */
-    public function setAttachments(array $attachments)
+    public function setAttachments($attachments)
     {
         $this->removeAttachments();
 
-        foreach ($attachments as $attachment) {
-            $this->addAttachment($attachment);
+        if (is_array($attachments)) {
+            foreach ($attachments as $attachment) {
+                $this->addAttachment($attachment);
+            }
         }
 
         return $this;
