@@ -43,6 +43,13 @@ class Client
         $this->httpClient = $httpClient;
     }
 
+    /**
+     * All undefined methods will be sent to a new Message instance.
+     *
+     * @param  string  $name
+     * @param  array  $args
+     * @return \ElfSundae\BearyChat\Message
+     */
     public function __call($name, $args)
     {
         $message = $this->createMessage();
@@ -89,6 +96,11 @@ class Client
         return $this->httpClient;
     }
 
+    /**
+     * Configure message defaults.
+     *
+     * @param  array  $messageDefaults
+     */
     protected function configureMessageDefaults(array $messageDefaults)
     {
         $defaults = [
@@ -98,6 +110,12 @@ class Client
         $this->messageDefaults = $messageDefaults + $defaults;
     }
 
+    /**
+     * Retrieve message defaults.
+     *
+     * @param  string|null  $option
+     * @return mixed
+     */
     public function getMessageDefaults($option = null)
     {
         return is_null($option) ?
@@ -105,6 +123,11 @@ class Client
             (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
     }
 
+    /**
+     * Create a new Message instance.
+     *
+     * @return \ElfSundae\BearyChat\Message
+     */
     public function createMessage()
     {
         return new Message($this);
@@ -131,6 +154,12 @@ class Client
         return false;
     }
 
+    /**
+     * Get the payload from a object.
+     *
+     * @param  mixed  $message
+     * @return string
+     */
     protected function getPayload($message)
     {
         if (is_object($message) && is_callable([$message, 'toArray'])) {
