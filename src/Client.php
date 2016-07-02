@@ -111,37 +111,36 @@ class Client
     }
 
     /**
-     * Send message, just alias to `sendPayload`.
+     * Send message to the BearyChat.
      *
      * @param  mixed $message  A JSON string, or any arrayable object.
      * @return bool
      */
     public function sendMessage($message)
     {
-        return $this->sendPayload($message);
+        if ($payload = $this->getPayload($message)) {
+
+            $response = $this->getHttpClient()->post(
+                $this->getWebhook(),
+                ['body' => $payload]
+            );
+
+            return (200 === $response->getStatusCode());
+        }
+
+        return false;
     }
 
-    /**
-     * Send message payload.
-     *
-     * @param  mixed $payload  A JSON string, or any arrayable object.
-     * @return bool
-     */
-    public function sendPayload($payload)
+    protected function getPayload($message)
     {
-        if (is_object($payload) && is_callable([$payload, 'toArray'])) {
-            $payload = $payload->toArray();
+        if (is_object($message) && is_callable([$message, 'toArray'])) {
+            $message = $message->toArray();
         }
 
-        if (!is_string($payload)) {
-            $payload = json_encode((array)$payload);
+        if ($message && !is_string($message)) {
+            $message = json_encode($message);
         }
 
-        $response = $this->getHttpClient()->post(
-            $this->getWebhook(),
-            ['body' => $payload]
-        );
-
-        return (200 === $response->getStatusCode());
+        return $message;
     }
 }
