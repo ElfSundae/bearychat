@@ -129,6 +129,10 @@ class Client
      */
     public function sendPayload($payload)
     {
+        if (is_object($payload) && is_callable([$payload, 'toArray'])) {
+            $payload = $payload->toArray();
+        }
+
         if (!is_string($payload)) {
             $payload = json_encode((array)$payload);
         }
