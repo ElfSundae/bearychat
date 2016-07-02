@@ -11,34 +11,25 @@ You can install this package using the [Composer](https://getcomposer.org) manag
 
 Then you may create an incoming webhook on your BearyChat team account, and read the [payload format](https://bearychat.com/integrations/incoming).
 
-## Usage
+## Basic Usage
+
+**Sending a message**
 
 ```php
 $client = new \ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incoming/...');
 
-$client->sendMessage([
-    'text' => 'Hi there :smile:'
-]);
+// Sending a message to the default channel
+$client->send('Hi there :smile:');
 
-$client->sendMessage([
-    'text' => 'another message.',
-    'channel' => 'all',
-    'attachments' => [
-        [
-            'title' => 'attach title',
-            'text' => 'attach content https://github.com/ElfSundae/BearyChat',
-            'color' => 'red'
-        ],
-        [
-            'text' => 'This is an image :sunrise:',
-            'images' => [
-                ['url' => 'https://bearychat.com/94030a9693952e9f7e769a5c61d2dcfb.png']
-            ],
-            'color' => '#3e4787'
-        ]
-    ]
-]);
+// Sending a styled message
+$client->send('disable **markdown**', false, 'custom notification');
+
+// Sending a message with an attachment
+$client->send('**message with attachment**', 'This is an `attachment`.', 'Attachment Title', $imageUrl, '#f00');
 ```
+
+> ![](https://raw.githubusercontent.com/ElfSundae/BearyChat/master/screenshots/sending-a-message.png)
+
 
 ## License
 
