@@ -305,7 +305,7 @@ class Message
      */
     public function addAttachment($attachment)
     {
-        if ($attachment && !is_array($attachment)) {
+        if (!is_array($attachment)) {
             $attachment = $this->getAttachmentFromArguments(func_get_args());
         }
 
