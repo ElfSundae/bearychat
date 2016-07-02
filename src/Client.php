@@ -31,7 +31,7 @@ class Client
      * Create a new Client.
      *
      * @param  string  $webhook
-     * @param  array  $messageDefaults
+     * @param  array  $messageDefaults  see MessageDefaults
      * @param  \GuzzleHttp\Client  $httpClient
      */
     public function __construct($webhook, $messageDefaults = [], $httpClient = null)
