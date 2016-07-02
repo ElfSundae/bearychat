@@ -77,7 +77,7 @@ class Message
      * Set the text.
      *
      * @param  string  $text
-     * @return this
+     * @return $this
      */
     public function setText($text)
     {
@@ -100,7 +100,7 @@ class Message
      * Set the notification.
      *
      * @param  string  $notification
-     * @return this
+     * @return $this
      */
     public function setNotification($notification)
     {
@@ -123,7 +123,7 @@ class Message
      * Set the markdown.
      *
      * @param  bool $markdown
-     * @return this
+     * @return $this
      */
     public function setMarkdown($markdown)
     {
@@ -135,7 +135,7 @@ class Message
     /**
      * Enable markdown.
      *
-     * @return this
+     * @return $this
      */
     public function enableMarkdown()
     {
@@ -145,7 +145,7 @@ class Message
     /**
      * Disable markdown.
      *
-     * @return this
+     * @return $this
      */
     public function disableMarkdown()
     {
@@ -166,7 +166,7 @@ class Message
      * Set the channel.
      *
      * @param  string  $channel
-     * @return this
+     * @return $this
      */
     public function setChannel($channel)
     {
@@ -179,7 +179,7 @@ class Message
      * Change the channel.
      *
      * @param  string  $channel
-     * @return this
+     * @return $this
      */
     public function toChannel($channel)
     {
@@ -200,7 +200,7 @@ class Message
      * Set the user.
      *
      * @param  string  $user
-     * @return this
+     * @return $this
      */
     public function setUser($user)
     {
@@ -213,7 +213,7 @@ class Message
      * Change the user.
      *
      * @param  string  $user
-     * @return this
+     * @return $this
      */
     public function toUser($user)
     {
@@ -224,7 +224,7 @@ class Message
      * Change the target (user or channel) that the message should be sent to.
      *
      * @param  string  $target
-     * @return this
+     * @return $this
      */
     public function to($target)
     {
@@ -245,5 +245,84 @@ class Message
         }
 
         return $this;
+    }
+
+    /**
+     * Get the attachments.
+     *
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * Set the attachments.
+     *
+     * @param  mixed  $attachments
+     * @return $this
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->removeAttachments();
+
+        foreach ($attachments as $attachment) {
+            $this->addAttachment($attachment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an attachment to message.
+     *
+     * @param  array  $attachment
+     * @return $this
+     */
+    public function addAttachment($attachment)
+    {
+        $this->attachments[] = (array)$attachment;
+
+        return $this;
+    }
+
+    /**
+     * Add an attachment to message.
+     *
+     * @param  array  $attachment
+     * @return $this
+     */
+    public function add($attachment)
+    {
+        return $this->addAttachment($attachment);
+    }
+
+    /**
+     * Remove attachment[s] for message.
+     *
+     * @param  mixed
+     * @return $this
+     */
+    public function removeAttachments()
+    {
+        if (func_num_args() > 0) {
+            $indices = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
+
+            foreach ($indices as $index) {
+                unset($this->attachments[$index]);
+            }
+
+            $this->attachments = array_values($this->attachments);
+        } else {
+            $this->attachments = [];
+        }
+
+        return $this;
+    }
+
+    public function remove()
+    {
+        return call_user_func_array([$this, 'removeAttachments'], func_get_args());
     }
 }

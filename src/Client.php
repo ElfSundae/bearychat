@@ -43,6 +43,15 @@ class Client
         $this->httpClient = $httpClient;
     }
 
+    public function __call($name, $args)
+    {
+        $message = $this->createMessage();
+
+        call_user_func_array([$message, $name], $args);
+
+        return $message;
+    }
+
     /**
      * Get the webhook.
      *
@@ -94,6 +103,11 @@ class Client
         return is_null($option) ?
             $this->messageDefaults :
             (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
+    }
+
+    public function createMessage()
+    {
+        return new Message($this);
     }
 
     /**
