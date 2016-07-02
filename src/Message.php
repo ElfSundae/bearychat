@@ -368,4 +368,11 @@ class Message
     {
         return $this->client->sendMessage($this);
     }
+
+    public function sendTo($target)
+    {
+        $this->to($target);
+
+        return call_user_func_array([$this, 'send'], array_slice(func_get_args(), 1));
+    }
 }
