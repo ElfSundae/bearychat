@@ -155,6 +155,8 @@ $client->send(
 $client->send('(5) New images', null, null, [$imageUrl1, $imageUrl2]);
 ```
 
+> ![](https://raw.githubusercontent.com/ElfSundae/BearyChat/master/screenshots/sending-message.png)
+
 ## License
 
 The BearyChat PHP package is available under the [MIT license](LICENSE).
