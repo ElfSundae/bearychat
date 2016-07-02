@@ -295,8 +295,8 @@ class Message
     /**
      * Add an attachment to the message.
      *
-     * The parameter can be an array that contains attachment's all field.
-     * The parameters can also be attachment's fields that ordered with
+     * The parameter can be an payload array that contains attachment's all field.
+     * The parameters can also be attachment's fields that in order of
      * text, title, images and color. Except the text, other parameters
      * can be ignored.
      *
