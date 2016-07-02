@@ -432,8 +432,20 @@ class Message
      *
      * @return bool
      */
-    public function send()
+    public function send($text = null, $markdown = null, $notification = null)
     {
+        if (!is_null($text)) {
+            $this->setText($text);
+        }
+
+        if (!is_null($markdown)) {
+            $this->setMarkdown($markdown);
+        }
+
+        if (!is_null($notification)) {
+            $this->setNotification($notification);
+        }
+
         return $this->client->sendMessage($this);
     }
 
