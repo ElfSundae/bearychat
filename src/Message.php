@@ -54,6 +54,13 @@ class Message
     protected $attachments = [];
 
     /**
+     * The default values for each attachment.
+     *
+     * @var array
+     */
+    protected $attachmentDefaults = [];
+
+    /**
      * Create a new message.
      *
      * @param  \ElfSundae\BearyChat\Client $client
@@ -61,6 +68,8 @@ class Message
     public function __construct(Client $client)
     {
         $this->client = $client;
+
+        $this->configureDefaults($client->getMessageDefaults());
     }
 
     /**
@@ -282,7 +291,9 @@ class Message
      */
     public function addAttachment($attachment)
     {
-        $this->attachments[] = (array)$attachment;
+        $attachment = (array)$attachment + $this->attachmentDefaults;
+
+        $this->attachments[] = $attachment;
 
         return $this;
     }
@@ -324,5 +335,32 @@ class Message
     public function remove()
     {
         return call_user_func_array([$this, 'removeAttachments'], func_get_args());
+    }
+
+    protected function configureDefaults($defaults)
+    {
+        if (isset($defaults[MessageDefaults::CHANNEL]))
+            $this->setChannel($defaults[MessageDefaults::CHANNEL]);
+        if (isset($defaults[MessageDefaults::USER]))
+            $this->setUser($defaults[MessageDefaults::USER]);
+        if (isset($defaults[MessageDefaults::MARKDOWN]))
+            $this->setMarkdown($defaults[MessageDefaults::MARKDOWN]);
+        if (isset($defaults[MessageDefaults::NOTIFICATION]))
+            $this->setNotification($defaults[MessageDefaults::NOTIFICATION]);
+
+        if (isset($defaults[MessageDefaults::ATTACHMENT_COLOR]))
+            $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
+    }
+
+    public function toArray()
+    {
+        return [
+            'text' => $this->getText(),
+            'notification' => $this->getNotification(),
+            'markdown' => $this->getMarkdown(),
+            'channel' => $this->getChannel(),
+            'user' => $this->getUser(),
+            'attachments' => $this->getAttachments(),
+        ];
     }
 }
