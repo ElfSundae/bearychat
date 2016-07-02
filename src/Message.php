@@ -142,7 +142,7 @@ class Message
     }
 
     /**
-     * Enable markdown.
+     * Enable markdown syntax for text.
      *
      * @return $this
      */
@@ -152,7 +152,7 @@ class Message
     }
 
     /**
-     * Disable markdown.
+     * Disable markdown syntax for text.
      *
      * @return $this
      */
@@ -162,7 +162,7 @@ class Message
     }
 
     /**
-     * Get the channel.
+     * Get the channel which the message should be sent to.
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class Message
     }
 
     /**
-     * Set the channel.
+     * Set the channel which the message should be sent to.
      *
      * @param  string  $channel
      * @return $this
@@ -185,7 +185,7 @@ class Message
     }
 
     /**
-     * Change the channel.
+     * Set the channel which the message should be sent to.
      *
      * @param  string  $channel
      * @return $this
@@ -196,7 +196,7 @@ class Message
     }
 
     /**
-     * Get the user.
+     * Get the user which the message should be sent to.
      *
      * @return string
      */
@@ -206,7 +206,7 @@ class Message
     }
 
     /**
-     * Set the user.
+     * Set the user which the message should be sent to.
      *
      * @param  string  $user
      * @return $this
@@ -219,7 +219,7 @@ class Message
     }
 
     /**
-     * Change the user.
+     * Set the user which the message should be sent to.
      *
      * @param  string  $user
      * @return $this
@@ -230,7 +230,12 @@ class Message
     }
 
     /**
-     * Change the target (user or channel) that the message should be sent to.
+     * Set the target (user or channel) that the message should be sent to.
+     *
+     * The target may be started with '@' for sending to user, and the channel's
+     * starter mark '#' is optional.
+     *
+     * It will remove all targets if the given target is null.
      *
      * @param  string  $target
      * @return $this
@@ -241,15 +246,17 @@ class Message
             $this->setChannel(null);
             $this->setUser(null);
         } else {
+            $target = (string)$target;
+
             $mark = mb_substr($target, 0, 1);
             $to = mb_substr($target, 1);
 
-            if (!empty($to)) {
-                if ('#' == $mark) {
-                    $this->setChannel($to);
-                } else if ('@' == $mark) {
-                    $this->setUser($to);
-                }
+            if ($mark == '@' && !empty($to)) {
+                $this->setUser($to);
+            } else if ($mark == '#' && !empty($to)) {
+                $this->setChannel($to);
+            } else if (!empty($target)) {
+                $this->setChannel($target);
             }
         }
 
@@ -257,7 +264,7 @@ class Message
     }
 
     /**
-     * Get the attachments.
+     * Get the attachments for the message.
      *
      * @return array
      */
@@ -267,7 +274,7 @@ class Message
     }
 
     /**
-     * Set the attachments.
+     * Set the attachments for the message.
      *
      * @param  mixed  $attachments
      * @return $this
@@ -284,33 +291,72 @@ class Message
     }
 
     /**
-     * Add an attachment to message.
+     * Add an attachment to the message.
      *
-     * @param  array  $attachment
+     * The parameter can be an array that contains attachment's all field.
+     * The parameters can also be attachment's fields that ordered with
+     * text, title, images and color. Except the text, other parameters
+     * can be ignored.
+     *
+     * @param  mixed $attachment...
      * @return $this
      */
     public function addAttachment($attachment)
     {
-        $attachment = (array)$attachment + $this->attachmentDefaults;
+        if ($attachment && !is_array($attachment)) {
 
-        $this->attachments[] = $attachment;
+            $args = func_get_args();
+            $argsCount = count($args);
+
+            $attachment = ['text' => $args[0]];
+
+            if ($argsCount > 1) {
+                $attachment['title'] = $args[1];
+            }
+
+            if ($argsCount > 2) {
+                $images = [];
+                $imagesArgument = is_array($args[2]) ? $args[2] : [$args[2]];
+                foreach ($imagesArgument as $value) {
+                    if (is_string($value)) {
+                        $images[] = ['url' => $value];
+                    } else if (is_array($value) && isset($value['url'])) {
+                        $images[] = $value
+                    }
+                }
+                if (!empty($images)) {
+                    $attachment['images'] = $images;
+                }
+            }
+
+            if ($argsCount > 3 && is_string($args[3])) {
+                $attachment['color'] = $args[3];
+            }
+        }
+
+        if (!empty($attachment)) {
+            $attachment += $this->attachmentDefaults;
+
+            $this->attachments[] = $attachment;
+        }
 
         return $this;
     }
 
     /**
-     * Add an attachment to message.
+     * Add an attachment to the message.
+     * It alias to `addAttachment`.
      *
      * @param  array  $attachment
      * @return $this
      */
     public function add($attachment)
     {
-        return $this->addAttachment($attachment);
+        return call_user_func_array([$this, 'addAttachment'], func_get_args());
     }
 
     /**
-     * Remove attachment[s] for message.
+     * Remove attachment[s] for the message.
      *
      * @param  mixed
      * @return $this
@@ -332,12 +378,24 @@ class Message
         return $this;
     }
 
+    /**
+     * Remove attachment[s] for the message.
+     * It alias to `removeAttachments`.
+     *
+     * @param  mixed
+     * @return $this
+     */
     public function remove()
     {
         return call_user_func_array([$this, 'removeAttachments'], func_get_args());
     }
 
-    protected function configureDefaults($defaults)
+    /**
+     * Configure message defaults.
+     *
+     * @param  array  $defaults
+     */
+    protected function configureDefaults(arary $defaults)
     {
         if (isset($defaults[MessageDefaults::CHANNEL]))
             $this->setChannel($defaults[MessageDefaults::CHANNEL]);
@@ -352,6 +410,11 @@ class Message
             $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
     }
 
+    /**
+     * Convert the message to array.
+     *
+     * @return array
+     */
     public function toArray()
     {
         return [
@@ -364,11 +427,22 @@ class Message
         ];
     }
 
+    /**
+     * Send the message.
+     *
+     * @return bool
+     */
     public function send()
     {
         return $this->client->sendMessage($this);
     }
 
+    /**
+     * Send the message to the given target.
+     *
+     * @param  string  $target
+     * @return bool
+     */
     public function sendTo($target)
     {
         $this->to($target);
