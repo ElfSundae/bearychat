@@ -306,34 +306,7 @@ class Message
     public function addAttachment($attachment)
     {
         if ($attachment && !is_array($attachment)) {
-
-            $args = func_get_args();
-            $argsCount = count($args);
-
-            $attachment = ['text' => (string)$args[0]];
-
-            if ($argsCount > 1) {
-                $attachment['title'] = (string)$args[1];
-            }
-
-            if ($argsCount > 2) {
-                $images = [];
-                $imagesArgument = is_array($args[2]) ? $args[2] : [$args[2]];
-                foreach ($imagesArgument as $value) {
-                    if (is_string($value)) {
-                        $images[] = ['url' => $value];
-                    } else if (is_array($value) && isset($value['url'])) {
-                        $images[] = $value;
-                    }
-                }
-                if (!empty($images)) {
-                    $attachment['images'] = $images;
-                }
-            }
-
-            if ($argsCount > 3 && is_string($args[3])) {
-                $attachment['color'] = $args[3];
-            }
+            $attachment = $this->getAttachmentFromArguments(func_get_args());
         }
 
         if (!empty($attachment)) {
@@ -343,6 +316,41 @@ class Message
         }
 
         return $this;
+    }
+
+    protected function getAttachmentFromArguments($args)
+    {
+        $attachment = [];
+        $argsCount = count($args);
+
+        if ($argsCount > 0 && !empty($args[0])) {
+           $attachment['text'] = (string)$args[0];
+        }
+
+        if ($argsCount > 1 && !empty($args[1])) {
+            $attachment['title'] = (string)$args[1];
+        }
+
+        if ($argsCount > 2 && !empty($args[2])) {
+            $images = [];
+            $imagesArgument = is_array($args[2]) ? $args[2] : [$args[2]];
+            foreach ($imagesArgument as $value) {
+                if (is_string($value)) {
+                    $images[] = ['url' => $value];
+                } else if (is_array($value) && isset($value['url'])) {
+                    $images[] = $value;
+                }
+            }
+            if (!empty($images)) {
+                $attachment['images'] = $images;
+            }
+        }
+
+        if ($argsCount > 3 && !empty($args[3])) {
+            $attachment['color'] = (string)$args[3];
+        }
+
+        return $attachment;
     }
 
     /**
@@ -436,20 +444,33 @@ class Message
     /**
      * Send the message.
      *
+     * The parameters can be `($text, $markdown, $notification)`, and the $text and
+     * the $notification can be `null` that does not modify the exist field.
+     * The parameters can also be
+     * `($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`.
+     *
+     * @param mixed
      * @return bool
      */
-    public function send($text = null, $markdown = null, $notification = null)
+    public function send()
     {
-        if (!is_null($text)) {
-            $this->setText($text);
-        }
+        if ($count = func_num_args()) {
+            if (!is_null(func_get_arg(0))) {
+                $this->setText(func_get_arg(0));
+            }
 
-        if (!is_null($markdown)) {
-            $this->setMarkdown($markdown);
-        }
+            if ($count > 1 && is_bool(func_get_arg(1))) {
+                $this->setMarkdown(func_get_arg(1));
 
-        if (!is_null($notification)) {
-            $this->setNotification($notification);
+                if ($count > 2 && !is_null(func_get_arg(2))) {
+                    $this->setNotification(func_get_arg(2));
+                }
+            } else if ($count > 1) {
+                call_user_func_array(
+                    [$this, 'addAttachment'],
+                    array_slice(func_get_args(), 1)
+                );
+            }
         }
 
         return $this->client->sendMessage($this);
@@ -458,7 +479,7 @@ class Message
     /**
      * Send the message to the given target.
      *
-     * @param  string  $target
+     * @param  string|mixed  $target
      * @return bool
      */
     public function sendTo($target)
