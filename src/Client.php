@@ -44,7 +44,7 @@ class Client
     }
 
     /**
-     * All undefined methods will be sent to a new Message instance.
+     * Any unhandled methods will be sent to a new Message instance.
      *
      * @param  string  $name
      * @param  array  $args
