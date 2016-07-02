@@ -321,7 +321,7 @@ class Message
                     if (is_string($value)) {
                         $images[] = ['url' => $value];
                     } else if (is_array($value) && isset($value['url'])) {
-                        $images[] = $value
+                        $images[] = $value;
                     }
                 }
                 if (!empty($images)) {
@@ -395,7 +395,7 @@ class Message
      *
      * @param  array  $defaults
      */
-    protected function configureDefaults(arary $defaults)
+    protected function configureDefaults(array $defaults)
     {
         if (isset($defaults[MessageDefaults::CHANNEL]))
             $this->setChannel($defaults[MessageDefaults::CHANNEL]);
@@ -417,14 +417,18 @@ class Message
      */
     public function toArray()
     {
-        return [
+        return array_filter([
             'text' => $this->getText(),
             'notification' => $this->getNotification(),
             'markdown' => $this->getMarkdown(),
             'channel' => $this->getChannel(),
             'user' => $this->getUser(),
             'attachments' => $this->getAttachments(),
-        ];
+        ], function ($value, $key) {
+            return !(is_null($value) ||
+                     ($key == 'markdown' && $value == true) ||
+                     (is_array($value) && empty($value)));
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
     /**
