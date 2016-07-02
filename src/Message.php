@@ -310,10 +310,10 @@ class Message
             $args = func_get_args();
             $argsCount = count($args);
 
-            $attachment = ['text' => $args[0]];
+            $attachment = ['text' => (string)$args[0]];
 
             if ($argsCount > 1) {
-                $attachment['title'] = $args[1];
+                $attachment['title'] = (string)$args[1];
             }
 
             if ($argsCount > 2) {
