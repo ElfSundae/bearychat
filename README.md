@@ -13,7 +13,7 @@ Then you may create an Incoming Webhook on your [BearyChat][] team account, and 
 
 ## Documentation
 
-### Basic Usage
+### Introduction
 
 To send messages, first create a [BearyChat client](src/Client.php) with your webhook URL:
 
@@ -44,35 +44,24 @@ $json = '{"text": "Good job :+1:", "channel": "all"}';
 $client->sendMessage($json);
 ```
 
-In addition to the ugly payload, there are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class. Any unhandled methods to a `Client` instance will be sent to a new `Message` instance, and the most of `Message` methods return `Message` itself, so you can chain [message modifications](#message-modifications).
+In addition to the ugly payload, there are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class. Any unhandled methods to a `Client` instance will be sent to a new `Message` instance, and the most of `Message` methods return `Message` itself, so you can chain [message modifications](#message-modifications) to achieve one-liner code.
+
+You can also call the powerful `send` or `sendTo` method with message contents for [sending a message](#sending-message).
 
 ```php
-$client = new Client($webhook);
+$client->to('#all')->text('Hello')->add('World')->send();
 
-$client->toChannel('all')
-->setText('Hi there!')
-->disableMarkdown()
-->addAttachment([
-    'title' => 'Attatchment Title',
-    'images' => [
-        ['url' => 'http://loremflickr.com/300/300/cat'],
-        ['url' => 'http://loremflickr.com/320/200/dog']
-    ]
-])
-->add([
-    'text' => 'Attatchment content'
-])
-->send();
+$client->sendTo('all', 'Hello', 'World');
 ```
 
 ### Message Modifications
 
-+ **text**: `getText` , `setText($text)`
-+ **notification**: `getNotification` , `setNotification($notification)`
-+ **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `enableMarkdown($enable = true)` , `disableMarkdown`
-+ **channel**: `getChannel` , `setChannel($channel)` , `toChannel($channel)` , `to($channel)`
-+ **user**: `getUser` , `setUser($user)` , `toUser($user)` , `to('@'.$user)`
-+ **attachments**: `getAttachments` , `setAttachments($attachments)` , `addAttachment(...)` , `add(...)` , `removeAttachments(...)` , `remove(...)`
++ **text**: `getText` , `setText($text)` , `text($text)`
++ **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
++ **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
++ **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
++ **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
++ **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `removeAttachments(...)` , `remove(...)`
 
 As you can see, the `to($target)` method can change the message's target to an user if `$target` is started with `@` , otherwise it will set the channel that the message should be sent to. The channel's starter mark `#` is **optional** in `to` method, which means the result of `to('#dev')` and `to('dev')` is the same.
 
@@ -80,6 +69,7 @@ Method `setAttachments($attachments)` accepts an array of attachments, and each 
 
 ```php
 $client->to('@elf')
+->text('message')
 ->add([
     'text' => 'Content of the first attachment.',
     'title' => 'First Attachment',
@@ -101,12 +91,41 @@ $client->to('@elf')
 To remove attachments, call `removeAttachments` or `remove` with indices.
 
 ```php
-$message->remove(0)->remove(0, 1)->remove([1, 3]);
+$message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 ```
 
 ### Message Presentation
 
 Call `toArray()` method on a Message instance will create an payload array.
+
+```php
+$message = $client->to('@elf')->text('foo')->markdown(false)
+            ->add('bar', 'some images', 'path/to/image', 'blue');
+
+echo json_encode($message->toArray(), JSON_PRETTY_PRINT);
+```
+
+will output:
+
+```json
+{
+    "text": "foo",
+    "markdown": false,
+    "user": "elf",
+    "attachments": [
+        {
+            "text": "bar",
+            "title": "some images",
+            "images": [
+                {
+                    "url": "path\/to\/image"
+                }
+            ],
+            "color": "blue"
+        }
+    ]
+}
+```
 
 ### Sending Message
 
@@ -117,7 +136,7 @@ The `send` method optional accepts variable number of arguments to quickly chang
 + Sending a basic message: `send($text, $markdown = true, $notification)`
 + Sending a message with one attachment added: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
 
-The `sendTo` method is useful when you want to change the message target before calling `send` method.
+The `sendTo` method is useful when you want to change the message's target before calling `send` method.
 
 ```php
 $client = new Client($webhook, [
