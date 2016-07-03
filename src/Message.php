@@ -101,7 +101,7 @@ class Message
      * @param  string  $text
      * @return $this
      */
-    public function message($text)
+    public function text($text)
     {
         return $this->setText($text);
     }
@@ -130,6 +130,17 @@ class Message
     }
 
     /**
+     * Set the notification.
+     *
+     * @param  string  $notification
+     * @return $this
+     */
+    public function notification($notification)
+    {
+        return $this->setNotification($notification);
+    }
+
+    /**
      * Get the markdown.
      *
      * @return bool
@@ -153,23 +164,14 @@ class Message
     }
 
     /**
-     * Enable markdown syntax for text.
+     * Set the markdown.
      *
+     * @param  bool $markdown
      * @return $this
      */
-    public function enableMarkdown($enable = true)
+    public function markdown($markdown = true)
     {
-        return $this->setMarkdown($enable);
-    }
-
-    /**
-     * Disable markdown syntax for text.
-     *
-     * @return $this
-     */
-    public function disableMarkdown()
-    {
-        return $this->setMarkdown(false);
+        return $this->setMarkdown($markdown);
     }
 
     /**
@@ -201,7 +203,7 @@ class Message
      * @param  string  $channel
      * @return $this
      */
-    public function toChannel($channel)
+    public function channel($channel)
     {
         return $this->setChannel($channel);
     }
@@ -235,7 +237,7 @@ class Message
      * @param  string  $user
      * @return $this
      */
-    public function toUser($user)
+    public function user($user)
     {
         return $this->setUser($user);
     }
@@ -301,6 +303,17 @@ class Message
         }
 
         return $this;
+    }
+
+    /**
+     * Set the attachments for the message.
+     *
+     * @param  mixed  $attachments
+     * @return $this
+     */
+    public function attachments($attachments)
+    {
+        return $this->setAttachments($attachments);
     }
 
     /**
@@ -466,8 +479,14 @@ class Message
     public function send()
     {
         if ($count = func_num_args()) {
-            if (!is_null(func_get_arg(0))) {
-                $this->setText(func_get_arg(0));
+            $firstArg = func_get_arg(0);
+
+            if (1 == $count && (is_array($firstArg) || is_object($firstArg))) {
+                return $this->client->sendMessage($firstArg);
+            }
+
+            if (!is_null($firstArg)) {
+                $this->setText($firstArg);
             }
 
             if ($count > 1 && is_bool(func_get_arg(1))) {
