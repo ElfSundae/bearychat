@@ -24,6 +24,8 @@ $client = new \ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incomi
 Besides the webhook, you may want to setup some default values for all messages which will be sent with this client:
 
 ```php
+use ElfSundae\BearyChat\Client;
+
 $client = new Client($webhook, [
     'channel' => 'server-log',
     'attachment_color' => '#3e4787'
