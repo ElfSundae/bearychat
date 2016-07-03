@@ -1,7 +1,7 @@
 {
     "name": "elfsundae/bearychat",
-    "description": "A PHP package for sending message to BearyChat with the Incoming Webhook.",
-    "keywords": ["bearychat", "laravel", "incoming webhook"],
+    "description": "A PHP package for sending message to the BearyChat with the Incoming Webhook.",
+    "keywords": ["bearychat", "incoming webhook", "Robot"],
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/ElfSundae/BearyChat",
