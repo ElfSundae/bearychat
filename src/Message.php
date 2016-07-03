@@ -96,6 +96,17 @@ class Message
     }
 
     /**
+     * Set the text.
+     *
+     * @param  string  $text
+     * @return $this
+     */
+    public function message($text)
+    {
+        return $this->setText($text);
+    }
+
+    /**
      * Get the notification.
      *
      * @return string
