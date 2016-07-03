@@ -1,28 +1,27 @@
-BearyChat for PHP
----
+# BearyChat for PHP
 
-A PHP package for sending message to [BearyChat](https://bearychat.com)
-with the [Incoming Webhook](https://bearychat.com/integrations/incoming).
+A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1].
 
 ## Installation
 
-You can install this package using the [Composer](https://getcomposer.org) manager.
+You can install this package using the [Composer][] manager.
+```
+composer require elfsundae/bearychat
+```
 
-    composer require elfsundae/bearychat
+Then you may create an Incoming Webhook on your [BearyChat][] team account, and read the [payload format][1].
 
-Then you may create an incoming webhook on your BearyChat team account, and read
-the [payload format](https://bearychat.com/integrations/incoming).
+## Documentation
 
-## Usage
+### Basic Usage
 
-To send messages, first create a BearyChat client with your webhook URL:
+To send messages, first create a [BearyChat client](src/Client.php) with your webhook URL:
 
 ```php
 $client = new \ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incoming/...');
 ```
 
-Besides the webhook, you can setup some default values for all messages which will be sent 
-with this client:
+Besides the webhook, you may want to setup some default values for all messages which will be sent with this client:
 
 ```php
 $client = new Client($webhook, [
@@ -31,25 +30,23 @@ $client = new Client($webhook, [
 ]);
 ```
 
-All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php).
-You can access message default with `$client->getMessageDefaults($key)`, or retrieve all
-defaults with `$client->getMessageDefaults()`.
+All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)`, or retrieve all defaults with `$client->getMessageDefaults()` .
 
-To send a message, just call `sendMessage` with [message payload](https://bearychat.com/integrations/incoming):
+To send a message, just call `sendMessage` with a [message payload][1]:
 
 ```php
 $client->sendMessage([
     'text' => 'Hi, Elf!',
     'user' => 'elf'
 ]);
+
+$json = '{"text": "Good job :+1:", "channel": "all"}';
+$client->sendMessage($json);
 ```
 
-In addition to the payload, there are a variety of convenient methods that work with the
-payload in [`Message`](src/Message.php) class. Any unhandled methods in `Client` will be
-sent to a new `Message` instance. And the most of `Message` methods return `Message` itself,
-so you can chain message modifications.
+In addition to the ugly payload, there are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class. Any unhandled methods to a `Client` instance will be sent to a new `Message` instance, and the most of `Message` methods return `Message` itself, so you can chain [message modifications](#message-modifications).
 
-```
+```php
 $client = new Client($webhook);
 
 $client->toChannel('all')
@@ -70,22 +67,16 @@ $client->toChannel('all')
 
 ### Message Modifications
 
-+ **text**: `getText`, `setText($text)`
-+ **notification**: `getNotification`, `setNotification($notification)`
-+ **markdown**: `getMarkdown`, `setMarkdown($markdown)`, `enableMarkdown($enable = true)`, `disableMarkdown`
-+ **channel**: `getChannel`, `setChannel($channel)`, `toChannel($channel)`, `to($channel)`
-+ **user**: `getUser`, `setUser($user)`, `toUser($user)`, `to('@'.$user)`
-+ **attachments**: `getAttachments`, `setAttachments($attachments)`, `addAttachment(...)`, `add(...)`, `removeAttachments(...)`, `remove(...)`
++ **text**: `getText` , `setText($text)`
++ **notification**: `getNotification` , `setNotification($notification)`
++ **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `enableMarkdown($enable = true)` , `disableMarkdown`
++ **channel**: `getChannel` , `setChannel($channel)` , `toChannel($channel)` , `to($channel)`
++ **user**: `getUser` , `setUser($user)` , `toUser($user)` , `to('@'.$user)`
++ **attachments**: `getAttachments` , `setAttachments($attachments)` , `addAttachment(...)` , `add(...)` , `removeAttachments(...)` , `remove(...)`
 
-As you can see, the `to($target)` method can change the message's target to an user if
-`$target` is started with `@`, otherwise it will set the channel that the message should
-be sent to. The channel's starter mark `#` is optional in `to` method, which means the result
-of `to('#dev')` and `to('dev')` is the same.
+As you can see, the `to($target)` method can change the message's target to an user if `$target` is started with `@` , otherwise it will set the channel that the message should be sent to. The channel's starter mark `#` is **optional** in `to` method, which means the result of `to('#dev')` and `to('dev')` is the same.
 
-`setAttachments` accepts an array of attachments, and each attachment can be an array
-(attachment payload) or a variable arguments list in order of `text`, `title`, `images`
-then `color`, and the `images` can be an image URL or an array contains image URLs.
-This attachment parameter is also applicable to method `addAttachment` or `add`.
+Method `setAttachments($attachments)` accepts an array of attachments, and each attachment can be an array (attachment payload) or a variable arguments list in order of `text, title, images, color`, and the `images` can be an image URL or an array contains image URLs. **Note:** This type of attachment parameters is also applicable to the method `addAttachment` or `add` .
 
 ```php
 $client->to('@elf')
@@ -107,26 +98,26 @@ $client->to('@elf')
 ->send();
 ```
 
-Use `removeAttachments` or `remove` to remove attachment[s]:
+To remove attachments, call `removeAttachments` or `remove` with indices.
 
 ```php
-$message->remove(0)
-->remove(0, 1)
-->remove([1, 3]);
+$message->remove(0)->remove(0, 1)->remove([1, 3]);
 ```
 
 ### Message Presentation
 
-`$message->toArray()` will create an payload array.
+Call `toArray()` method on a Message instance will create an payload array.
 
 ### Sending Message
 
-You can call `send` method on a `Message` instance to send that message.
-The `send` method optional accepts variable number of arguments to quickly change the
-payload content.
+You can call `send` or `sendTo` method on a Message instance to send that message.
+
+The `send` method optional accepts variable number of arguments to quickly change the payload content:
 
 + Sending a basic message: `send($text, $markdown = true, $notification)`
-+ Sending a message with one attachment: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
++ Sending a message with one attachment added: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
+
+The `sendTo` method is useful when you want to change the message target before calling `send` method.
 
 ```php
 $client = new Client($webhook, [
@@ -134,29 +125,37 @@ $client = new Client($webhook, [
 ]);
 
 // Sending a message to the default channel
-$client->send('(1) Hi there :smile:');
+$client->send('Hi there :smile:');
 
 // Sending a customized message
-$client->send('(2) disable **markdown**', false, 'custom notification');
+$client->send('disable **markdown**', false, 'custom notification');
 
-// Sending a message with one attachment
-$client->send('(3) message title', 'Message Content');
+// Sending a message with one attachment added
+$client->send('message title', 'Attachment Content');
 
 // Sending a message with an customized attachment
 $client->send(
-    '(4) **message with attachment**',
-    'This is an `attachment`.',
+    'message with an customized attachment',
+    'Attachment Content',
     'Attachment Title',
     $imageUrl,
     '#f00'
 );
 
 // Sending a message with multiple images
-$client->send('(5) New images', null, null, [$imageUrl1, $imageUrl2]);
-```
+$client->send('multiple images', null, null, [$imageUrl1, $imageUrl2]);
 
-> ![](https://raw.githubusercontent.com/ElfSundae/BearyChat/master/screenshots/sending-message.png)
+// Sending a message to a different channel
+$client->sendTo('iOS', '**Lunch Time !!!**');
+
+// Sending a message to an user
+$client->sendTo('@elf', 'Where are you?');
+```
 
 ## License
 
 The BearyChat PHP package is available under the [MIT license](LICENSE).
+
+[1]: https://bearychat.com/integrations/incoming
+[BearyChat]: https://bearychat.com
+[Composer]: https://getcomposer.org
