@@ -18,7 +18,7 @@ class Client
      *
      * @var array
      */
-    protected $messageDefaults;
+    protected $messageDefaults = [];
 
     /**
      * The Guzzle http client.
@@ -114,13 +114,13 @@ class Client
      *
      * @param  array  $messageDefaults
      */
-    protected function configureMessageDefaults(array $messageDefaults)
+    protected function configureMessageDefaults($messageDefaults)
     {
         $defaults = [
             MessageDefaults::MARKDOWN => true,
         ];
 
-        $this->messageDefaults = $messageDefaults + $defaults;
+        $this->messageDefaults = (array)$messageDefaults + $defaults;
     }
 
     /**
@@ -134,6 +134,13 @@ class Client
         return is_null($option) ?
             $this->messageDefaults :
             (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
+    }
+
+    public function setMessageDefaults($messageDefaults)
+    {
+        $this->configureMessageDefaults($messageDefaults);
+
+        return $this;
     }
 
     /**
