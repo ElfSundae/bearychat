@@ -73,10 +73,23 @@ class Client
      * Set the webhook.
      *
      * @param  string  $webhook
+     * @return $this
      */
     public function setWebhook($webhook)
     {
         $this->webhook = $webhook;
+
+        return $this;
+    }
+
+    /**
+     * Change the webhook URL.
+     *
+     * @param  string  $webhook
+     */
+    public function webhook($webhook)
+    {
+        return $this->setWebhook($webhook);
     }
 
     /**
