@@ -13,7 +13,7 @@ Then you may create an Incoming Webhook on your [BearyChat][] team account, and 
 
 ## Documentation
 
-### Introduction
+### Overview
 
 To send messages, first create a [BearyChat client](src/Client.php) with your webhook URL:
 
@@ -46,7 +46,9 @@ $json = '{"text": "Good job :+1:", "channel": "all"}';
 $client->sendMessage($json);
 ```
 
-In addition to the ugly payload, there are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class. Any unhandled methods to a `Client` instance will be sent to a new `Message` instance, and the most of `Message` methods return `Message` itself, so you can chain [message modifications](#message-modifications) to achieve one-liner code.
+In addition to the ugly payload, `sendMessage` can handle any object which provides a payload array via its `toArray` method. And there is a ready-made [`Message`](src/Message.php) class available. There are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class.
+
+For convenience, any unhandled methods called to a `Client` instance will be sent to a new `Message` instance, and the most methods of a `Message` instance return itself, so you can chain [message modifications](#message-modifications) to achieve one-liner code.
 
 You can also call the powerful `send` or `sendTo` method with message contents for [sending a message](#sending-message).
 
@@ -57,6 +59,8 @@ $client->sendTo('all', 'Hello', 'World');
 ```
 
 ### Message Modifications
+
+Available Message Modifications Methods:
 
 + **text**: `getText` , `setText($text)` , `text($text)`
 + **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
@@ -171,6 +175,18 @@ $client->sendTo('iOS', '**Lunch Time !!!**');
 
 // Sending a message to an user
 $client->sendTo('@elf', 'Where are you?');
+```
+
+### Customize Client
+
+If you want to create a `Message` instance explicitly, the client's `createMessage` method will return a fresh `Message` instance configured with the client's message defaults.
+
+A `Client` instance is mutable, it means you can change its webhook URL or the message defaults by calling `setWebhook`, `webhook`, or `setMessageDefaults`.
+
+```php
+$client->webhook($webhook_ios)->setMessageDefaults([
+    'channel' => 'ios_dev'
+])->send('App reviewing status has updated.');
 ```
 
 ## License
