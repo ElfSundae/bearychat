@@ -132,23 +132,6 @@ class Client
     }
 
     /**
-     * Get the http client.
-     * @return \GuzzleHttp\Client
-     */
-    protected function getHttpClient()
-    {
-        if (!($this->httpClient instanceof HttpClient)) {
-            $this->httpClient = new HttpClient([
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ]
-            ]);
-        }
-
-        return $this->httpClient;
-    }
-
-    /**
      * Create a new Message instance.
      *
      * @return \ElfSundae\BearyChat\Message
@@ -196,5 +179,22 @@ class Client
         }
 
         return $message;
+    }
+
+    /**
+     * Get the http client.
+     * @return \GuzzleHttp\Client
+     */
+    protected function getHttpClient()
+    {
+        if (!($this->httpClient instanceof HttpClient)) {
+            $this->httpClient = new HttpClient([
+                'headers' => [
+                    'Content-Type' => 'application/json'
+                ]
+            ]);
+        }
+
+        return $this->httpClient;
     }
 }
