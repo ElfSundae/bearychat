@@ -93,6 +93,45 @@ class Client
     }
 
     /**
+     * Retrieve message defaults.
+     *
+     * @param  string|null  $option
+     * @return mixed
+     */
+    public function getMessageDefaults($option = null)
+    {
+        return is_null($option) ?
+            $this->messageDefaults :
+            (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
+    }
+
+    /**
+     * Set the message defaults.
+     *
+     * @param  array  $messageDefaults
+     */
+    public function setMessageDefaults($messageDefaults)
+    {
+        $this->configureMessageDefaults($messageDefaults);
+
+        return $this;
+    }
+
+    /**
+     * Configure the message defaults.
+     *
+     * @param  array  $messageDefaults
+     */
+    protected function configureMessageDefaults($messageDefaults)
+    {
+        $defaults = [
+            MessageDefaults::MARKDOWN => true,
+        ];
+
+        $this->messageDefaults = (array)$messageDefaults + $defaults;
+    }
+
+    /**
      * Get the http client.
      * @return \GuzzleHttp\Client
      */
@@ -107,40 +146,6 @@ class Client
         }
 
         return $this->httpClient;
-    }
-
-    /**
-     * Configure message defaults.
-     *
-     * @param  array  $messageDefaults
-     */
-    protected function configureMessageDefaults($messageDefaults)
-    {
-        $defaults = [
-            MessageDefaults::MARKDOWN => true,
-        ];
-
-        $this->messageDefaults = (array)$messageDefaults + $defaults;
-    }
-
-    /**
-     * Retrieve message defaults.
-     *
-     * @param  string|null  $option
-     * @return mixed
-     */
-    public function getMessageDefaults($option = null)
-    {
-        return is_null($option) ?
-            $this->messageDefaults :
-            (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
-    }
-
-    public function setMessageDefaults($messageDefaults)
-    {
-        $this->configureMessageDefaults($messageDefaults);
-
-        return $this;
     }
 
     /**
