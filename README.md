@@ -60,7 +60,7 @@ $client->sendTo('all', 'Hello', 'World');
 
 ### Message Modifications
 
-Available Message Modifications Methods:
+Available methods for message modification:
 
 + **text**: `getText` , `setText($text)` , `text($text)`
 + **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
