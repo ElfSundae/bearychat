@@ -329,7 +329,7 @@ class Message
      */
     public function addAttachment($attachment)
     {
-        if (!is_array($attachment)) {
+        if (!is_array($attachment) || func_num_args() > 1) {
             $attachment = $this->getAttachmentFromArguments(func_get_args());
         }
 
@@ -342,6 +342,12 @@ class Message
         return $this;
     }
 
+    /**
+     * Convert arguments list to attachment array.
+     *
+     * @param  mixed  $args
+     * @return array
+     */
     protected function getAttachmentFromArguments($args)
     {
         $attachment = [];
