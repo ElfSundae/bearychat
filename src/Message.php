@@ -444,6 +444,12 @@ class Message
             $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
     }
 
+    /**
+     * Convert object to string.
+     *
+     * @param  mixed  $value
+     * @return string
+     */
     protected function asString($value)
     {
         if (is_object($value)) {
