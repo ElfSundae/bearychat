@@ -348,11 +348,11 @@ class Message
         $argsCount = count($args);
 
         if ($argsCount > 0 && !empty($args[0])) {
-           $attachment['text'] = (string)$args[0];
+           $attachment['text'] = $this->asString($args[0]);
         }
 
         if ($argsCount > 1 && !empty($args[1])) {
-            $attachment['title'] = (string)$args[1];
+            $attachment['title'] = $this->asString($args[1]);
         }
 
         if ($argsCount > 2 && !empty($args[2])) {
@@ -442,6 +442,23 @@ class Message
 
         if (isset($defaults[MessageDefaults::ATTACHMENT_COLOR]))
             $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
+    }
+
+    protected function asString($value)
+    {
+        if (is_object($value)) {
+            $class = get_class($value);
+
+            if (is_callable([$value, 'toArray'])) {
+                $value = $value->toArray();
+            }
+
+            return '['.$class.']: '.json_encode($value, JSON_UNESCAPED_UNICODE);
+        } else if (is_array($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        return (string)$value;
     }
 
     /**
