@@ -170,7 +170,7 @@ class Client
      */
     protected function getPayload($message)
     {
-        if (is_object($message) && is_callable([$message, 'toArray'])) {
+        if (is_object($message) && method_exists($message, 'toArray')) {
             $message = $message->toArray();
         }
 

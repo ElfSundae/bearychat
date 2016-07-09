@@ -498,7 +498,7 @@ class Message
         if (is_object($value)) {
             $class = get_class($value);
 
-            if (is_callable([$value, 'toArray'])) {
+            if (method_exists($value, 'toArray')) {
                 $value = $value->toArray();
             }
 
