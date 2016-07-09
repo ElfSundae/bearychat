@@ -61,6 +61,13 @@ class Message
     protected $attachmentDefaults = [];
 
     /**
+     * The keys allowed in an attachment payload.
+     *
+     * @var array
+     */
+    protected static $allowedAttachmentKeys;
+
+    /**
      * Create a new message.
      *
      * @param  \ElfSundae\BearyChat\Client|null $client
@@ -70,6 +77,18 @@ class Message
         if ($this->client = $client) {
             $this->configureDefaults($client->getMessageDefaults());
         }
+    }
+
+    /**
+     * Get the keys allowed in an attachment payload.
+     *
+     * @return array
+     */
+    public static function getAllowedAttachmentKeys()
+    {
+        return self::$allowedAttachmentKeys ?: self::$allowedAttachmentKeys = [
+                    'title', 'text', 'color', 'images'
+                ];
     }
 
     /**
@@ -329,8 +348,8 @@ class Message
      */
     public function addAttachment($attachment)
     {
-        if (!is_array($attachment) || func_num_args() > 1) {
-            $attachment = $this->getAttachmentFromArguments(func_get_args());
+        if (func_num_args() > 1 || !$this->isAttachmentPayload($attachment)) {
+            $attachment = $this->getAttachmentPayloadFromArguments(func_get_args());
         }
 
         if (!empty($attachment)) {
@@ -348,7 +367,7 @@ class Message
      * @param  mixed  $args
      * @return array
      */
-    protected function getAttachmentFromArguments($args)
+    protected function getAttachmentPayloadFromArguments($args)
     {
         $attachment = [];
         $argsCount = count($args);
@@ -381,6 +400,24 @@ class Message
         }
 
         return $attachment;
+    }
+
+    /**
+     * Detect whether the given parameter is an attachment payload array.
+     *
+     * @param  mixed  $payload
+     * @return boolean
+     */
+    protected function isAttachmentPayload($payload)
+    {
+        if (is_array($payload)) {
+            foreach (static::getAllowedAttachmentKeys() as $key) {
+                if (isset($payload[$key])) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
