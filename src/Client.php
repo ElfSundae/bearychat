@@ -163,7 +163,7 @@ class Client
     }
 
     /**
-     * Get the payload from a object.
+     * Get the payload from an object.
      *
      * @param  mixed  $message
      * @return string
