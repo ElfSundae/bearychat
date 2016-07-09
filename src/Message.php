@@ -63,13 +63,13 @@ class Message
     /**
      * Create a new message.
      *
-     * @param  \ElfSundae\BearyChat\Client $client
+     * @param  \ElfSundae\BearyChat\Client|null $client
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client = null)
     {
-        $this->client = $client;
-
-        $this->configureDefaults($client->getMessageDefaults());
+        if ($this->client = $client) {
+            $this->configureDefaults($client->getMessageDefaults());
+        }
     }
 
     /**
@@ -507,6 +507,10 @@ class Message
      */
     public function send()
     {
+        if (!$this->client) {
+            return false;
+        }
+
         if ($count = func_num_args()) {
             $firstArg = func_get_arg(0);
 
