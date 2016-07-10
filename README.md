@@ -3,7 +3,7 @@
 A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1].
 
 + **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
-+ [**:cn: 中文文档**](README_zh.md)
++ :cn: [**中文文档**](README_zh.md)
 
 ## Installation
 

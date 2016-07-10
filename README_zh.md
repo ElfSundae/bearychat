@@ -3,7 +3,7 @@
 这是一个用于向 [BearyChat][] 发送 [Incoming Webhook][1] 消息的 PHP 扩展包。
 
 + **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
-+ [**:us: Documentation in English**](README.md)
++ :us: [**Documentation in English**](README.md)
 
 ## 安装
 
