@@ -3,6 +3,7 @@
 A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1].
 
 + **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
++ [**中文文档**](README_zh.md)
 
 ## Installation
 
@@ -11,7 +12,7 @@ You can install this package using the [Composer][] manager.
 composer require elfsundae/bearychat
 ```
 
-Then you may create an Incoming Webhook on your [BearyChat][] team account, and read the [payload format][1].
+Then you may create an Incoming Robot on your [BearyChat][] team account, and read the [payload format][1].
 
 ## Documentation
 
@@ -36,7 +37,7 @@ $client = new Client($webhook, [
 
 All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)`, or retrieve all defaults with `$client->getMessageDefaults()` .
 
-To send a message, just call `sendMessage` with a [message payload][1]:
+To send a message, just call `sendMessage` on the client instance with a [message payload][1] array or a payload JSON string:
 
 ```php
 $client->sendMessage([
@@ -62,7 +63,7 @@ $client->sendTo('all', 'Hello', 'World');
 
 ### Message Modifications
 
-Available methods for message modification:
+Available methods for message modification in the `Message` class:
 
 + **text**: `getText` , `setText($text)` , `text($text)`
 + **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
@@ -73,7 +74,7 @@ Available methods for message modification:
 
 As you can see, the `to($target)` method can change the message's target to an user if `$target` is started with `@` , otherwise it will set the channel that the message should be sent to. The channel's starter mark `#` is **optional** in `to` method, which means the result of `to('#dev')` and `to('dev')` is the same.
 
-Method `setAttachments($attachments)` accepts an array of attachments, and each attachment can be an array (attachment payload) or a variable arguments list in order of `text, title, images, color`, and the `images` can be an image URL or an array contains image URLs. **Note:** This type of attachment parameters is also applicable to the method `addAttachment` or `add` .
+Method `addAttachment($attachment)` accepts a PHP array of attachment payload, or a variable arguments list in order of `text, title, images, color`, and the `images` can be an image URL or an array contains image URLs. And this type of attachment parameters is also applicable to the method `add`.
 
 ```php
 $client->to('@elf')
@@ -104,7 +105,7 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 ### Message Presentation
 
-Call `toArray()` method on a Message instance will create an payload array.
+Call `toArray()` method on a Message instance will get the payload array for this message.
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
