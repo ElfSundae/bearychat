@@ -2,6 +2,8 @@
 
 A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1].
 
++ **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
+
 ## Installation
 
 You can install this package using the [Composer][] manager.
@@ -196,3 +198,4 @@ The BearyChat PHP package is available under the [MIT license](LICENSE).
 [1]: https://bearychat.com/integrations/incoming
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
+[Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
