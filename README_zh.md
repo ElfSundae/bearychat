@@ -2,8 +2,9 @@
 
 这是一个用于向 [BearyChat][] 发送 [Incoming Webhook][1] 消息的 PHP 扩展包。
 
-+ **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
 + :us: [**Documentation in English**](README.md)
++ **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
++ **Yii 集成:** [BearyChat for Yii 2][Yii2-BearyChat]
 
 ## 安装
 
@@ -198,3 +199,4 @@ BearyChat PHP 扩展包在 [MIT 许可协议](LICENSE)下提供和使用。
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
 [Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
+[Yii2-BearyChat]: https://github.com/krissss/yii2-beary-chart

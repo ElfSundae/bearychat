@@ -2,8 +2,9 @@
 
 A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1].
 
-+ **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
 + :cn: [**中文文档**](README_zh.md)
++ **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
++ **Yii integration:** [BearyChat for Yii 2][Yii2-BearyChat]
 
 ## Installation
 
@@ -200,3 +201,4 @@ The BearyChat PHP package is available under the [MIT license](LICENSE).
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
 [Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
+[Yii2-BearyChat]: https://github.com/krissss/yii2-beary-chart
