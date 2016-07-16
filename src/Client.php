@@ -54,9 +54,7 @@ class Client
     {
         $message = $this->createMessage();
 
-        call_user_func_array([$message, $name], $args);
-
-        return $message;
+        return call_user_func_array([$message, $name], $args);
     }
 
     /**
