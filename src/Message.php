@@ -2,7 +2,9 @@
 
 namespace ElfSundae\BearyChat;
 
-class Message
+use JsonSerializable;
+
+class Message implements JsonSerializable
 {
     /**
      * The GearyChat client for sending message.
@@ -515,7 +517,7 @@ class Message
     }
 
     /**
-     * Convert the message to array.
+     * Convert the message to an array.
      *
      * @return array
      */
@@ -533,6 +535,27 @@ class Message
                      ($key == 'markdown' && $value == true) ||
                      (is_array($value) && empty($value)));
         }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Convert the message to JSON.
+     *
+     * @param  int  $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->jsonSerialize(), $options);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     /**
