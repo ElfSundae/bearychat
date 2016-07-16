@@ -3,6 +3,7 @@
 namespace ElfSundae\BearyChat;
 
 use GuzzleHttp\Client as HttpClient;
+use JsonSerializable;
 
 class Client
 {
@@ -168,8 +169,14 @@ class Client
      */
     protected function getPayload($message)
     {
-        if (is_object($message) && method_exists($message, 'toArray')) {
-            $message = $message->toArray();
+        if ($message instanceof JsonSerializable) {
+            $message = json_encode($message);
+        } else if (is_object($message)) {
+            if (method_exists($message, 'toJson')) {
+                $message = $message->toJson();
+            } else if (method_exists($message, 'toArray')) {
+                $message = $message->toArray();
+            }
         }
 
         if ($message && !is_string($message)) {
