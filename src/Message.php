@@ -615,4 +615,14 @@ class Message implements JsonSerializable
 
         return call_user_func_array([$this, 'send'], array_slice(func_get_args(), 1));
     }
+
+    /**
+     * Convert the message to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJson();
+    }
 }
