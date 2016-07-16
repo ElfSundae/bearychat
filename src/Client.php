@@ -48,7 +48,7 @@ class Client
      *
      * @param  string  $name
      * @param  array  $args
-     * @return \ElfSundae\BearyChat\Message
+     * @return mixed
      */
     public function __call($name, $args)
     {
