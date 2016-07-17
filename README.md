@@ -104,13 +104,13 @@ To remove attachments, call `removeAttachments` or `remove` with indices.
 $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 ```
 
-### Message Presentation
+### Message Representation
 
 Call `toArray()` method on a Message instance will get the payload array for this message.
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
-            ->add('bar', 'some images', 'path/to/image', 'blue');
+    ->add('bar', 'some images', 'path/to/image', 'blue');
 
 echo json_encode($message->toArray(), JSON_PRETTY_PRINT);
 ```
