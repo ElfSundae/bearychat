@@ -115,7 +115,7 @@ $message = $client->to('@elf')->text('foo')->markdown(false)
 echo json_encode($message->toArray(), JSON_PRETTY_PRINT);
 ```
 
-will output:
+The above example will output:
 
 ```json
 {
