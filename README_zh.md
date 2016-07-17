@@ -108,13 +108,13 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 调用 `Message` 对象的 `toArray()` 方法可以得到这个消息的 payload 数组。也可以使用 `$message->toJson()`, `json_encode($message)` 或 `(string) $message` 得到 `$message` 的 JSON payload.
 
-消息 payload 可以被用来请求 [Incoming Webhook][1] 或 响应 [Outgoing Robot][2].
+消息 payload 可以被用来请求 [Incoming Webhook][1] 或响应 [Outgoing Robot][2].
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
             ->add('bar', 'some images', 'path/to/image', 'blue');
 
-echo json_encode($message->toArray(), JSON_PRETTY_PRINT);
+echo $message->toJson(JSON_PRETTY_PRINT);
 ```
 
 执行上面的代码会输出以下内容：
