@@ -413,12 +413,19 @@ class Message implements JsonSerializable
     protected function isAttachmentPayload($payload)
     {
         if (is_array($payload)) {
-            foreach (static::getAllowedAttachmentKeys() as $key) {
-                if (isset($payload[$key])) {
-                    return true;
-                }
-            }
+
+            // Loose comparing
+            //
+            // foreach (static::getAllowedAttachmentKeys() as $key) {
+            //     if (isset($payload[$key])) {
+            //         return true;
+            //     }
+            // }
+
+            // Strict comparing
+            return empty(array_diff(array_keys($payload), static::getAllowedAttachmentKeys()));
         }
+
         return false;
     }
 
