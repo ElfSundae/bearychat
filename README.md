@@ -1,6 +1,6 @@
 # BearyChat for PHP
 
-A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1].
+A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1], and creating response payload for the [Outgoing Robot][2].
 
 + :cn: [**中文文档**](README_zh.md)
 + **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
@@ -36,7 +36,7 @@ $client = new Client($webhook, [
 ]);
 ```
 
-All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)`, or retrieve all defaults with `$client->getMessageDefaults()` .
+All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)` or retrieve all defaults with `$client->getMessageDefaults()` .
 
 To send a message, just call `sendMessage` on the client instance with a [message payload][1] array or a payload JSON string:
 
@@ -50,7 +50,7 @@ $json = '{"text": "Good job :+1:", "channel": "all"}';
 $client->sendMessage($json);
 ```
 
-In addition to the ugly payload, `sendMessage` can handle any object which provides a payload array via its `toArray` method. And there is a ready-made [`Message`](src/Message.php) class available. There are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class.
+In addition to the ugly payload, `sendMessage` can handle `JsonSerializable` instances or any object which provides a payload via its `toArray` or `toJson` method. And there is a ready-made [`Message`](src/Message.php) class available for creating payloads for Incoming messages or Outgoing responses. There are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class.
 
 For convenience, any unhandled methods called to a `Client` instance will be sent to a new `Message` instance, and the most methods of a `Message` instance return itself, so you can chain [message modifications](#message-modifications) to achieve one-liner code.
 
@@ -106,7 +106,9 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 ### Message Representation
 
-Call `toArray()` method on a Message instance will get the payload array for this message.
+Call `toArray()` method on a Message instance will get the payload array for this message. You may use `$message->toJson()`, `json_encode($message)` or `(string) $message` to get the JSON payload for `$message`. 
+
+The message payload may be used for requesting an [Incoming Webhook][1] or creating response for an [Outgoing Robot][2].
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
@@ -185,7 +187,7 @@ $client->sendTo('@elf', 'Where are you?');
 
 If you want to create a `Message` instance explicitly, the client's `createMessage` method will return a fresh `Message` instance configured with the client's message defaults.
 
-A `Client` instance is mutable, it means you can change its webhook URL or the message defaults by calling `setWebhook`, `webhook`, or `setMessageDefaults`.
+A `Client` instance is mutable, it means you can change its webhook URL or the message defaults by calling `setWebhook`, `webhook` or `setMessageDefaults`.
 
 ```php
 $client->webhook($webhook_ios)->setMessageDefaults([
@@ -198,6 +200,7 @@ $client->webhook($webhook_ios)->setMessageDefaults([
 The BearyChat PHP package is available under the [MIT license](LICENSE).
 
 [1]: https://bearychat.com/integrations/incoming
+[2]: https://bearychat.com/integrations/outgoing
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
 [Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat

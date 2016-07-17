@@ -1,6 +1,6 @@
 # BearyChat for PHP
 
-这是一个用于向 [BearyChat][] 发送 [Incoming Webhook][1] 消息的 PHP 扩展包。
+这是一个用于向 [BearyChat][] 发送 [Incoming][1] 消息、创建 [Outgoing][2] 响应的 PHP 扩展包。
 
 + :us: [**Documentation in English**](README.md)
 + **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
@@ -50,9 +50,9 @@ $json = '{"text": "Good job :+1:", "channel": "all"}';
 $client->sendMessage($json);
 ```
 
-除了原生的消息 payload ，`sendMessage` 还可以处理任意通过其 `toArray` 方法提供 payload 数组的对象。同时该扩展包也提供了一个现成的 [`Message`](src/Message.php) 类，`Message` 类有很多便捷方法用来[操作消息 payload](#编辑消息)。
+除了原生的消息 payload ，`sendMessage` 还可以处理 `JsonSerializable` 实例，或任意通过其 `toArray` 或 `toJson` 方法提供 payload 数组的对象。同时该扩展包也提供了一个现成的 [`Message`](src/Message.php) 类用于创建 Incoming 消息，或生成 Outgoing 响应。`Message` 类有很多便捷方法用来[操作消息 payload](#编辑消息)。
 
-为了方便使用，对 `Client` 实例的所有不支持的方法调用将创建并返回一个新的 `Message` 对象，并且 `Message` 的绝大多数方法支持链接调用，这样就可以实现一行代码完成[编辑消息](#编辑消息)和[发送消息](#发送消息)。
+为了方便使用，对 `Client` 实例的所有不支持的方法调用将被发送至一个新的 `Message` 对象，并且 `Message` 的绝大多数方法支持链接调用，这样就可以实现一行代码完成[编辑消息](#编辑消息)和[发送消息](#发送消息)。
 
 另外，`Message` 对象还提供了两个强大的方法 `send` 和 `sendTo` 用来快速实现消息的编辑和发送。
 
@@ -106,7 +106,9 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 ### 消息持久化
 
-调用 `Message` 对象的 `toArray()` 方法可以得到这个消息的 payload 数组。
+调用 `Message` 对象的 `toArray()` 方法可以得到这个消息的 payload 数组。也可以使用 `$message->toJson()`, `json_encode($message)` 或 `(string) $message` 得到 `$message` 的 JSON payload.
+
+消息 payload 可以被用来请求 [Incoming Webhook][1] 或 响应 [Outgoing Robot][2].
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
@@ -196,6 +198,7 @@ $client->webhook($webhook_ios)->setMessageDefaults([
 BearyChat PHP 扩展包在 [MIT 许可协议](LICENSE)下提供和使用。
 
 [1]: https://bearychat.com/integrations/incoming
+[2]: https://bearychat.com/integrations/outgoing
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
 [Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
