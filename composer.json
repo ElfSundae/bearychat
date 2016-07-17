@@ -1,7 +1,7 @@
 {
     "name": "elfsundae/bearychat",
-    "description": "A PHP package for sending message to the BearyChat with the Incoming Webhook.",
-    "keywords": ["bearychat", "incoming webhook", "robot"],
+    "description": "A PHP package for sending message to the BearyChat with the Incoming Webhook, and creating response payload for the Outgoing Robot.",
+    "keywords": ["bearychat", "incoming", "webhook", "outgoing", "robot"],
     "license": "MIT",
     "homepage": "https://github.com/ElfSundae/BearyChat",
     "authors": [
@@ -16,7 +16,7 @@
         "guzzlehttp/guzzle": "~6.0|~5.3"
     },
     "suggest": {
-        "elfsundae/bearychat-laravel": "Required for Laravel integration."
+        "elfsundae/laravel-bearychat": "Required for Laravel integration."
     },
     "autoload": {
         "psr-4": {
