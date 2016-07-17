@@ -36,7 +36,7 @@ $client = new Client($webhook, [
 ]);
 ```
 
-All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)` or retrieve all defaults with `$client->getMessageDefaults()` .
+All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)`, or retrieve all defaults with `$client->getMessageDefaults()` .
 
 To send a message, just call `sendMessage` on the client instance with a [message payload][1] array or a payload JSON string:
 
