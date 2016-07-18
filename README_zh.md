@@ -50,9 +50,9 @@ $json = '{"text": "Good job :+1:", "channel": "all"}';
 $client->sendMessage($json);
 ```
 
-除了原生的消息 payload ，`sendMessage` 还可以处理 `JsonSerializable` 实例，或任意通过其 `toArray` 或 `toJson` 方法提供 payload 数组的对象。同时该扩展包也提供了一个现成的 [`Message`](src/Message.php) 类用于创建 Incoming 消息，或生成 Outgoing 响应。`Message` 类有很多便捷方法用来[操作消息 payload](#编辑消息)。
+除了原生的消息 payload ，`sendMessage` 还可以处理 `JsonSerializable` 实例，或任意通过其 `toArray` 或 `toJson` 方法提供 payload 的对象。同时该扩展包也提供了一个现成的 [`Message`](src/Message.php) 类用于创建 Incoming 消息，或生成 Outgoing 响应。`Message` 类有很多便捷方法用来[操作消息 payload](#编辑消息)。
 
-为了方便使用，对 `Client` 实例的所有不支持的方法调用将被发送至一个新的 `Message` 对象，并且 `Message` 的绝大多数方法支持链接调用，这样就可以实现一行代码完成[编辑消息](#编辑消息)和[发送消息](#发送消息)。
+为了方便使用，对 `Client` 实例的所有不支持的方法调用将被发送至一个新的 `Message` 对象，并且 `Message` 对象的绝大多数方法支持链接调用，这样就可以实现一行代码完成[编辑消息](#编辑消息)和[发送消息](#发送消息)。
 
 另外，`Message` 对象还提供了两个强大的方法 `send` 和 `sendTo` 用来快速实现消息的编辑和发送。
 
@@ -73,7 +73,7 @@ $client->sendTo('all', 'Hello', 'World');
 + **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
 + **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `removeAttachments(...)` , `remove(...)`
 
-如你所见，`to($target)` 方法可以改变消息的目标（接收方），如果参数 `$target` 是一个以 `@` 打头的字符串，消息将被发送至某个“人” (user)，否则消息的目标将是一个“讨论组” (channel) 。讨论组名字的打头字符 `#` 是可选的，这意味着 `to('#dev')` 和 `to('dev')` 效果一样。
+如你所见，`to($target)` 方法可以改变消息的目标（接收方），如果参数 `$target` 是一个以 `@` 打头的字符串，消息将被发送至某个“人”（ user ），否则消息的目标将是一个“讨论组”（ channel ）。讨论组名字的打头字符 `#` 是可选的，这意味着 `to('#dev')` 和 `to('dev')` 效果一样。
 
 方法 `addAttachment($attachment)` 可接受一个 PHP 数组 (attachment payload) 作为其参数，也可以是一个按照 `text, title, images, color` 顺序的可变参数，并且 `images` 可以是一个图片 URL 字符串也可以是一个包含图片 URL 的数组。`addAttachment` 的这种参数类型同样适应于 `add` 方法。
 
