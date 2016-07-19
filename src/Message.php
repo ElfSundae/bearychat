@@ -497,30 +497,24 @@ class Message implements JsonSerializable
     }
 
     /**
-     * Convert object to string.
+     * Convert any type to string.
      *
      * @param  mixed  $value
      * @return string
      */
-    protected function asString($value)
+    protected function asString($value, $jsonOptions = JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
     {
         if (is_object($value)) {
             if (method_exists($value, '__toString')) {
                 return (string)$value;
             }
 
-            $class = get_class($value);
-
             if (method_exists($value, 'toArray')) {
                 $value = $value->toArray();
             }
-
-            return '['.$class.']: '.json_encode($value, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-        } else if (is_array($value)) {
-            return json_encode($value, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
         }
 
-        return (string)$value;
+        return json_encode($value, $jsonOptions);
     }
 
     /**
