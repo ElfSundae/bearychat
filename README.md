@@ -1,5 +1,10 @@
 # BearyChat for PHP
 
+[![Latest Stable Version](https://poser.pugx.org/elfsundae/bearychat/version)](https://packagist.org/packages/elfsundae/bearychat)
+[![Latest Unstable Version](https://poser.pugx.org/elfsundae/bearychat/v/unstable)](https://packagist.org/packages/elfsundae/bearychat)
+[![Total Downloads](https://poser.pugx.org/elfsundae/bearychat/downloads)](https://packagist.org/packages/elfsundae/bearychat)
+[![License](https://poser.pugx.org/elfsundae/bearychat/license)](https://packagist.org/packages/elfsundae/bearychat)
+
 A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1], and creating response payload for the [Outgoing Robot][2].
 
 + :cn: [**中文文档**](README_zh.md)

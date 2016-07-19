@@ -1,5 +1,10 @@
 # BearyChat for PHP
 
+[![Latest Stable Version](https://poser.pugx.org/elfsundae/bearychat/version)](https://packagist.org/packages/elfsundae/bearychat)
+[![Latest Unstable Version](https://poser.pugx.org/elfsundae/bearychat/v/unstable)](https://packagist.org/packages/elfsundae/bearychat)
+[![Total Downloads](https://poser.pugx.org/elfsundae/bearychat/downloads)](https://packagist.org/packages/elfsundae/bearychat)
+[![License](https://poser.pugx.org/elfsundae/bearychat/license)](https://packagist.org/packages/elfsundae/bearychat)
+
 这是一个用于向 [BearyChat][] 发送 [Incoming][1] 消息、创建 [Outgoing][2] 响应的 PHP 扩展包。
 
 + :us: [**Documentation in English**](README.md)
