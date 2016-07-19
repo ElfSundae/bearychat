@@ -150,10 +150,12 @@ class Client
     {
         if ($payload = $this->getPayload($message)) {
 
-            $response = $this->getHttpClient()->post(
-                $this->getWebhook(),
-                ['body' => $payload]
-            );
+            $response = $this->getHttpClient()->post($this->getWebhook(), [
+                'headers' => [
+                    'Content-Type' => 'application/json'
+                ],
+                'body' => $payload
+            ]);
 
             return (200 === $response->getStatusCode());
         }
@@ -193,11 +195,7 @@ class Client
     protected function getHttpClient()
     {
         if (!($this->httpClient instanceof HttpClient)) {
-            $this->httpClient = new HttpClient([
-                'headers' => [
-                    'Content-Type' => 'application/json'
-                ]
-            ]);
+            $this->httpClient = new HttpClient;
         }
 
         return $this->httpClient;
