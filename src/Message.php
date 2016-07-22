@@ -514,7 +514,7 @@ class Message implements JsonSerializable
             }
         }
 
-        return json_encode($value, $jsonOptions);
+        return is_string($value) ? $value : json_encode($value, $jsonOptions);
     }
 
     /**
