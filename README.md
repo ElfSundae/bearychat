@@ -113,7 +113,7 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 Call the `toArray()` method on a Message instance will get the payload array for this message. You may use `$message->toJson()`, `json_encode($message)` or `(string) $message` to get the JSON payload for `$message`. 
 
-The message payload may be used for requesting an [Incoming Webhook][1] or creating response for an [Outgoing Robot][2].
+> :warning: **The message payload may be used for requesting an [Incoming Webhook][1] or creating response for an [Outgoing Robot][2].**
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
