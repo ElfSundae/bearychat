@@ -94,6 +94,16 @@ class Message implements JsonSerializable
     }
 
     /**
+     * Get the BearyChat client for sending message.
+     *
+     * @return \ElfSundae\BearyChat\Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
      * Get the text.
      *
      * @return string
