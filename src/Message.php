@@ -7,7 +7,7 @@ use JsonSerializable;
 class Message implements JsonSerializable
 {
     /**
-     * The GearyChat client for sending message.
+     * The BearyChat client for sending message.
      *
      * @var \ElfSundae\BearyChat\Client
      */
