@@ -295,9 +295,9 @@ class Message implements JsonSerializable
             $mark = mb_substr($target, 0, 1);
             $to = mb_substr($target, 1);
 
-            if ($mark == '@' && !empty($to)) {
+            if ($mark === '@' && !empty($to)) {
                 $this->setUser($to);
-            } else if ($mark == '#' && !empty($to)) {
+            } else if ($mark === '#' && !empty($to)) {
                 $this->setChannel($to);
             } else {
                 $this->setChannel($target);
@@ -437,6 +437,29 @@ class Message implements JsonSerializable
         }
 
         return false;
+    }
+
+    /**
+     * Get the attachments' defaults.
+     *
+     * @return array
+     */
+    public function getAttachmentDefaults()
+    {
+        return $this->attachmentDefaults;
+    }
+
+    /**
+     * Set the attachments' defaults.
+     *
+     * @param  array  $defaults
+     * @return $this
+     */
+    public function setAttachmentDefaults(array $defaults)
+    {
+        $this->attachmentDefaults = $defaults;
+
+        return $this;
     }
 
     /**
@@ -589,7 +612,7 @@ class Message implements JsonSerializable
         if ($count = func_num_args()) {
             $firstArg = func_get_arg(0);
 
-            if (1 == $count && (is_array($firstArg) || is_object($firstArg))) {
+            if (1 === $count && (is_array($firstArg) || is_object($firstArg))) {
                 return $this->client->sendMessage($firstArg);
             }
 
