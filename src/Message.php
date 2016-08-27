@@ -187,9 +187,9 @@ class Message implements JsonSerializable
      * @param  bool $markdown
      * @return $this
      */
-    public function setMarkdown(bool $markdown)
+    public function setMarkdown($markdown)
     {
-        $this->markdown = $markdown;
+        $this->markdown = (bool)$markdown;
 
         return $this;
     }
