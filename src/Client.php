@@ -32,15 +32,13 @@ class Client
      * Create a new Client.
      *
      * @param  string  $webhook
-     * @param  array  $messageDefaults  see MessageDefaults
+     * @param  array  $messageDefaults  see \ElfSundae\BearyChat\MessageDefaults
      * @param  \GuzzleHttp\Client  $httpClient
      */
-    public function __construct($webhook, $messageDefaults = [], $httpClient = null)
+    public function __construct($webhook = null, array $messageDefaults = [], $httpClient = null)
     {
         $this->webhook = $webhook;
-
-        $this->configureMessageDefaults($messageDefaults);
-
+        $this->messageDefaults = $messageDefaults;
         $this->httpClient = $httpClient;
     }
 
@@ -109,25 +107,11 @@ class Client
      *
      * @param  array  $messageDefaults
      */
-    public function setMessageDefaults($messageDefaults)
+    public function setMessageDefaults(array $messageDefaults)
     {
-        $this->configureMessageDefaults($messageDefaults);
+        $this->messageDefaults = $messageDefaults;
 
         return $this;
-    }
-
-    /**
-     * Configure the message defaults.
-     *
-     * @param  array  $messageDefaults
-     */
-    protected function configureMessageDefaults($messageDefaults)
-    {
-        $defaults = [
-            MessageDefaults::MARKDOWN => true,
-        ];
-
-        $this->messageDefaults = (array)$messageDefaults + $defaults;
     }
 
     /**

@@ -32,7 +32,7 @@ class Message implements JsonSerializable
      *
      * @var bool
      */
-    protected $markdown = true;
+    protected $markdown;
 
     /**
      * The channel that the message should be sent to.
@@ -187,9 +187,9 @@ class Message implements JsonSerializable
      * @param  bool $markdown
      * @return $this
      */
-    public function setMarkdown($markdown)
+    public function setMarkdown(bool $markdown)
     {
-        $this->markdown = (bool)$markdown;
+        $this->markdown = $markdown;
 
         return $this;
     }
@@ -543,7 +543,7 @@ class Message implements JsonSerializable
             'attachments' => $this->getAttachments(),
         ], function ($value, $key) {
             return !(is_null($value) ||
-                     ($key == 'markdown' && $value == true) ||
+                     ($key === 'markdown' && $value === true) ||
                      (is_array($value) && empty($value)));
         }, ARRAY_FILTER_USE_BOTH);
     }
