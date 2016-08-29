@@ -8,7 +8,7 @@
 
 + :us: [**Documentation in English**](README.md)
 + **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
-+ **Laravel Notification Channel:** [BearyChatChannel][BearyChatChannel]
++ **Laravel Notification Channel:** [BearyChatChannel][]
 + **Yii 集成:** [BearyChat for Yii 2][Yii2-BearyChat]
 
 ## 安装

@@ -8,7 +8,7 @@ A PHP package for sending message to the [BearyChat][] with the [Incoming Webhoo
 
 + :cn: [**中文文档**](README_zh.md)
 + **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
-+ **Laravel Notification Channel:** [BearyChatChannel][BearyChatChannel]
++ **Laravel Notification Channel:** [BearyChatChannel][]
 + **Yii integration:** [BearyChat for Yii 2][Yii2-BearyChat]
 
 ## Installation
