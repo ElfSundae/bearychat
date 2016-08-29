@@ -1,7 +1,6 @@
 # BearyChat for PHP
 
 [![Latest Stable Version](https://poser.pugx.org/elfsundae/bearychat/version)](https://packagist.org/packages/elfsundae/bearychat)
-[![Latest Unstable Version](https://poser.pugx.org/elfsundae/bearychat/v/unstable)](https://packagist.org/packages/elfsundae/bearychat)
 [![Total Downloads](https://poser.pugx.org/elfsundae/bearychat/downloads)](https://packagist.org/packages/elfsundae/bearychat)
 [![License](https://poser.pugx.org/elfsundae/bearychat/license)](https://packagist.org/packages/elfsundae/bearychat)
 
@@ -9,6 +8,7 @@
 
 + :us: [**Documentation in English**](README.md)
 + **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
++ **Laravel Notification Channel:** [BearyChatChannel][BearyChatChannel]
 + **Yii 集成:** [BearyChat for Yii 2][Yii2-BearyChat]
 
 ## 安装
@@ -208,3 +208,4 @@ BearyChat PHP 扩展包在 [MIT 许可协议](LICENSE)下提供和使用。
 [Composer]: https://getcomposer.org
 [Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
 [Yii2-BearyChat]: https://github.com/krissss/yii2-beary-chart
+[BearyChatChannel]: https://github.com/laravel-notification-channels/bearychat
