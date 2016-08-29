@@ -99,7 +99,7 @@ class Client
     {
         return is_null($option) ?
             $this->messageDefaults :
-            (isset($this->messageDefaults[$option]) ?  $this->messageDefaults[$option] : null);
+            (isset($this->messageDefaults[$option]) ? $this->messageDefaults[$option] : null);
     }
 
     /**
@@ -133,12 +133,11 @@ class Client
     public function sendMessage($message)
     {
         if ($payload = $this->getPayload($message)) {
-
             $response = $this->getHttpClient()->post($this->getWebhook(), [
                 'headers' => [
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/json',
                 ],
-                'body' => $payload
+                'body' => $payload,
             ]);
 
             return (200 === $response->getStatusCode());
@@ -157,15 +156,15 @@ class Client
     {
         if ($message instanceof JsonSerializable) {
             $message = json_encode($message);
-        } else if (is_object($message)) {
+        } elseif (is_object($message)) {
             if (method_exists($message, 'toJson')) {
                 $message = $message->toJson();
-            } else if (method_exists($message, 'toArray')) {
+            } elseif (method_exists($message, 'toArray')) {
                 $message = $message->toArray();
             }
         }
 
-        if ($message && !is_string($message)) {
+        if ($message && ! is_string($message)) {
             $message = json_encode($message);
         }
 
@@ -178,7 +177,7 @@ class Client
      */
     protected function getHttpClient()
     {
-        if (!($this->httpClient instanceof HttpClient)) {
+        if (! ($this->httpClient instanceof HttpClient)) {
             $this->httpClient = new HttpClient;
         }
 

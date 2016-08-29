@@ -89,7 +89,7 @@ class Message implements JsonSerializable
     public static function getAllowedAttachmentKeys()
     {
         return self::$allowedAttachmentKeys ?: self::$allowedAttachmentKeys = [
-                    'title', 'text', 'color', 'images'
+                    'title', 'text', 'color', 'images',
                 ];
     }
 
@@ -121,7 +121,7 @@ class Message implements JsonSerializable
      */
     public function setText($text)
     {
-        $this->text = $text ? (string)$text : null;
+        $this->text = $text ? (string) $text : null;
 
         return $this;
     }
@@ -155,7 +155,7 @@ class Message implements JsonSerializable
      */
     public function setNotification($notification)
     {
-        $this->notification = $notification ? (string)$notification : null;
+        $this->notification = $notification ? (string) $notification : null;
 
         return $this;
     }
@@ -189,7 +189,7 @@ class Message implements JsonSerializable
      */
     public function setMarkdown($markdown)
     {
-        $this->markdown = (bool)$markdown;
+        $this->markdown = (bool) $markdown;
 
         return $this;
     }
@@ -223,7 +223,7 @@ class Message implements JsonSerializable
      */
     public function setChannel($channel)
     {
-        $this->channel = $channel ? (string)$channel : null;
+        $this->channel = $channel ? (string) $channel : null;
 
         return $this;
     }
@@ -257,7 +257,7 @@ class Message implements JsonSerializable
      */
     public function setUser($user)
     {
-        $this->user = $user ? (string)$user : null;
+        $this->user = $user ? (string) $user : null;
 
         return $this;
     }
@@ -289,15 +289,15 @@ class Message implements JsonSerializable
         $this->setChannel(null);
         $this->setUser(null);
 
-        if (!empty($target)) {
-            $target = (string)$target;
+        if (! empty($target)) {
+            $target = (string) $target;
 
             $mark = mb_substr($target, 0, 1);
             $to = mb_substr($target, 1);
 
-            if ($mark === '@' && !empty($to)) {
+            if ($mark === '@' && ! empty($to)) {
                 $this->setUser($to);
-            } else if ($mark === '#' && !empty($to)) {
+            } elseif ($mark === '#' && ! empty($to)) {
                 $this->setChannel($to);
             } else {
                 $this->setChannel($target);
@@ -360,11 +360,11 @@ class Message implements JsonSerializable
      */
     public function addAttachment($attachment)
     {
-        if (func_num_args() > 1 || !$this->isAttachmentPayload($attachment)) {
+        if (func_num_args() > 1 || ! $this->isAttachmentPayload($attachment)) {
             $attachment = $this->getAttachmentPayloadFromArguments(func_get_args());
         }
 
-        if (!empty($attachment)) {
+        if (! empty($attachment)) {
             $attachment += $this->attachmentDefaults;
 
             $this->attachments[] = $attachment;
@@ -384,31 +384,31 @@ class Message implements JsonSerializable
         $attachment = [];
         $argsCount = count($args);
 
-        if ($argsCount > 0 && !empty($args[0])) {
-           $attachment['text'] = $this->asString($args[0]);
+        if ($argsCount > 0 && ! empty($args[0])) {
+            $attachment['text'] = $this->asString($args[0]);
         }
 
-        if ($argsCount > 1 && !empty($args[1])) {
+        if ($argsCount > 1 && ! empty($args[1])) {
             $attachment['title'] = $this->asString($args[1]);
         }
 
-        if ($argsCount > 2 && !empty($args[2])) {
+        if ($argsCount > 2 && ! empty($args[2])) {
             $images = [];
             $imagesArgument = is_array($args[2]) ? $args[2] : [$args[2]];
             foreach ($imagesArgument as $value) {
                 if (is_string($value)) {
                     $images[] = ['url' => $value];
-                } else if (is_array($value) && isset($value['url'])) {
+                } elseif (is_array($value) && isset($value['url'])) {
                     $images[] = $value;
                 }
             }
-            if (!empty($images)) {
+            if (! empty($images)) {
                 $attachment['images'] = $images;
             }
         }
 
-        if ($argsCount > 3 && !empty($args[3])) {
-            $attachment['color'] = (string)$args[3];
+        if ($argsCount > 3 && ! empty($args[3])) {
+            $attachment['color'] = (string) $args[3];
         }
 
         return $attachment;
@@ -418,7 +418,7 @@ class Message implements JsonSerializable
      * Detect whether the given parameter is an attachment payload array.
      *
      * @param  mixed  $payload
-     * @return boolean
+     * @return bool
      */
     protected function isAttachmentPayload($payload)
     {
@@ -516,17 +516,21 @@ class Message implements JsonSerializable
      */
     protected function configureDefaults(array $defaults)
     {
-        if (isset($defaults[MessageDefaults::CHANNEL]))
+        if (isset($defaults[MessageDefaults::CHANNEL])) {
             $this->setChannel($defaults[MessageDefaults::CHANNEL]);
-        if (isset($defaults[MessageDefaults::USER]))
+        }
+        if (isset($defaults[MessageDefaults::USER])) {
             $this->setUser($defaults[MessageDefaults::USER]);
-        if (isset($defaults[MessageDefaults::MARKDOWN]))
+        }
+        if (isset($defaults[MessageDefaults::MARKDOWN])) {
             $this->setMarkdown($defaults[MessageDefaults::MARKDOWN]);
-        if (isset($defaults[MessageDefaults::NOTIFICATION]))
+        }
+        if (isset($defaults[MessageDefaults::NOTIFICATION])) {
             $this->setNotification($defaults[MessageDefaults::NOTIFICATION]);
-
-        if (isset($defaults[MessageDefaults::ATTACHMENT_COLOR]))
+        }
+        if (isset($defaults[MessageDefaults::ATTACHMENT_COLOR])) {
             $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
+        }
     }
 
     /**
@@ -535,11 +539,11 @@ class Message implements JsonSerializable
      * @param  mixed  $value
      * @return string
      */
-    protected function asString($value, $jsonOptions = JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)
+    protected function asString($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
     {
         if (is_object($value)) {
             if (method_exists($value, '__toString')) {
-                return (string)$value;
+                return (string) $value;
             }
 
             if (method_exists($value, 'toArray')) {
@@ -565,7 +569,7 @@ class Message implements JsonSerializable
             'user' => $this->getUser(),
             'attachments' => $this->getAttachments(),
         ], function ($value, $key) {
-            return !(is_null($value) ||
+            return ! (is_null($value) ||
                      ($key === 'markdown' && $value === true) ||
                      (is_array($value) && empty($value)));
         }, ARRAY_FILTER_USE_BOTH);
@@ -605,7 +609,7 @@ class Message implements JsonSerializable
      */
     public function send()
     {
-        if (!$this->client) {
+        if (! $this->client) {
             return false;
         }
 
@@ -616,17 +620,17 @@ class Message implements JsonSerializable
                 return $this->client->sendMessage($firstArg);
             }
 
-            if (!is_null($firstArg)) {
+            if (! is_null($firstArg)) {
                 $this->setText($firstArg);
             }
 
             if ($count > 1 && is_bool(func_get_arg(1))) {
                 $this->setMarkdown(func_get_arg(1));
 
-                if ($count > 2 && !is_null(func_get_arg(2))) {
+                if ($count > 2 && ! is_null(func_get_arg(2))) {
                     $this->setNotification(func_get_arg(2));
                 }
-            } else if ($count > 1) {
+            } elseif ($count > 1) {
                 call_user_func_array(
                     [$this, 'addAttachment'],
                     array_slice(func_get_args(), 1)
