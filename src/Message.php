@@ -371,9 +371,9 @@ class Message implements JsonSerializable
 
             if ($index === 0) {
                 $attachment['text'] = $this->stringValue($value);
-            } else if ($index === 1) {
+            } elseif ($index === 1) {
                 $attachment['title'] = $this->stringValue($value);
-            } else if ($index === 2) {
+            } elseif ($index === 2) {
                 $images = [];
                 foreach ((array) $value as $img) {
                     if (is_array($img) && isset($img['url'])) {
@@ -386,7 +386,7 @@ class Message implements JsonSerializable
                 if ($images) {
                     $attachment['images'] = $images;
                 }
-            } else if ($index === 3) {
+            } elseif ($index === 3) {
                 $attachment['color'] = (string) $value;
             }
         }
@@ -515,22 +515,28 @@ class Message implements JsonSerializable
      */
     public function toArray()
     {
-        return array_filter([
-            'text' => $this->getText(),
-            'notification' => $this->getNotification(),
-            'markdown' => $this->getMarkdown(),
-            'channel' => $this->getChannel(),
-            'user' => $this->getUser(),
-            'attachments' => $this->getAttachments(),
-        ], function ($value, $key) {
-            return ! (is_null($value) ||
-                     ($key === 'markdown' && $value === true) ||
-                     (is_array($value) && empty($value)));
-        }, ARRAY_FILTER_USE_BOTH);
+        return array_filter(
+            [
+                'text' => $this->getText(),
+                'notification' => $this->getNotification(),
+                'markdown' => $this->getMarkdown(),
+                'channel' => $this->getChannel(),
+                'user' => $this->getUser(),
+                'attachments' => $this->getAttachments(),
+            ],
+            function ($value, $key) {
+                return ! (
+                    is_null($value) ||
+                    ($key === 'markdown' && $value === true) ||
+                    (is_array($value) && empty($value))
+                );
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
     }
 
     /**
-     * Convert the message to JSON.
+     * Convert the message to JSON string.
      *
      * @param  int  $options
      * @return string
