@@ -43,20 +43,6 @@ class Client
     }
 
     /**
-     * Any unhandled methods will be sent to a new Message instance.
-     *
-     * @param  string  $name
-     * @param  array  $args
-     * @return mixed
-     */
-    public function __call($name, $args)
-    {
-        $message = $this->createMessage();
-
-        return call_user_func_array([$message, $name], $args);
-    }
-
-    /**
      * Get the webhook.
      *
      * @return string
@@ -182,5 +168,19 @@ class Client
         }
 
         return $this->httpClient;
+    }
+
+    /**
+     * Any unhandled methods will be sent to a new Message instance.
+     *
+     * @param  string  $name
+     * @param  array  $args
+     * @return mixed
+     */
+    public function __call($name, $args)
+    {
+        $message = $this->createMessage();
+
+        return call_user_func_array([$message, $name], $args);
     }
 }
