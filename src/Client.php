@@ -2,8 +2,8 @@
 
 namespace ElfSundae\BearyChat;
 
-use GuzzleHttp\Client as HttpClient;
 use JsonSerializable;
+use GuzzleHttp\Client as HttpClient;
 
 class Client
 {
