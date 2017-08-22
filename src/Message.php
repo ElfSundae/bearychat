@@ -63,13 +63,6 @@ class Message implements JsonSerializable
     protected $attachmentDefaults = [];
 
     /**
-     * The keys allowed in an attachment payload.
-     *
-     * @var array
-     */
-    protected static $allowedAttachmentKeys;
-
-    /**
      * Create a new message.
      *
      * @param  \ElfSundae\BearyChat\Client|null $client
@@ -79,18 +72,6 @@ class Message implements JsonSerializable
         if ($this->client = $client) {
             $this->configureDefaults($client->getMessageDefaults());
         }
-    }
-
-    /**
-     * Get the keys allowed in an attachment payload.
-     *
-     * @return array
-     */
-    public static function getAllowedAttachmentKeys()
-    {
-        return self::$allowedAttachmentKeys ?: self::$allowedAttachmentKeys = [
-                    'title', 'text', 'color', 'images',
-                ];
     }
 
     /**
@@ -355,12 +336,12 @@ class Message implements JsonSerializable
      * text, title, images and color. Except the text, other parameters
      * can be ignored.
      *
-     * @param  mixed $attachment...
+     * @param  mixed  $attachment
      * @return $this
      */
     public function addAttachment($attachment)
     {
-        if (func_num_args() > 1 || ! $this->isAttachmentPayload($attachment)) {
+        if (! is_array($attachment)) {
             $attachment = $this->getAttachmentPayloadFromArguments(func_get_args());
         }
 
@@ -374,69 +355,43 @@ class Message implements JsonSerializable
     }
 
     /**
-     * Convert arguments list to attachment array.
+     * Convert arguments list to attachment payload.
      *
-     * @param  mixed  $args
+     * @param  array  $arguments
      * @return array
      */
-    protected function getAttachmentPayloadFromArguments($args)
+    protected function getAttachmentPayloadFromArguments($arguments)
     {
         $attachment = [];
-        $argsCount = count($args);
 
-        if ($argsCount > 0 && ! empty($args[0])) {
-            $attachment['text'] = $this->asString($args[0]);
-        }
+        foreach ($arguments as $index => $value) {
+            if (empty($value)) {
+                continue;
+            }
 
-        if ($argsCount > 1 && ! empty($args[1])) {
-            $attachment['title'] = $this->asString($args[1]);
-        }
-
-        if ($argsCount > 2 && ! empty($args[2])) {
-            $images = [];
-            $imagesArgument = is_array($args[2]) ? $args[2] : [$args[2]];
-            foreach ($imagesArgument as $value) {
-                if (is_string($value)) {
-                    $images[] = ['url' => $value];
-                } elseif (is_array($value) && isset($value['url'])) {
-                    $images[] = $value;
+            if ($index === 0) {
+                $attachment['text'] = $this->stringValue($value);
+            } else if ($index === 1) {
+                $attachment['title'] = $this->stringValue($value);
+            } else if ($index === 2) {
+                $images = [];
+                foreach ((array) $value as $img) {
+                    if (is_array($img) && isset($img['url'])) {
+                        $img = $img['url'];
+                    }
+                    if (is_string($img) && ! empty($img)) {
+                        $images[] = ['url' => $img];
+                    }
                 }
+                if ($images) {
+                    $attachment['images'] = $images;
+                }
+            } else if ($index === 3) {
+                $attachment['color'] = (string) $value;
             }
-            if (! empty($images)) {
-                $attachment['images'] = $images;
-            }
-        }
-
-        if ($argsCount > 3 && ! empty($args[3])) {
-            $attachment['color'] = (string) $args[3];
         }
 
         return $attachment;
-    }
-
-    /**
-     * Detect whether the given parameter is an attachment payload array.
-     *
-     * @param  mixed  $payload
-     * @return bool
-     */
-    protected function isAttachmentPayload($payload)
-    {
-        if (is_array($payload)) {
-
-            // Loose comparing
-            //
-            // foreach (static::getAllowedAttachmentKeys() as $key) {
-            //     if (isset($payload[$key])) {
-            //         return true;
-            //     }
-            // }
-
-            // Strict comparing
-            return empty(array_diff(array_keys($payload), static::getAllowedAttachmentKeys()));
-        }
-
-        return false;
     }
 
     /**
@@ -466,7 +421,7 @@ class Message implements JsonSerializable
      * Add an attachment to the message.
      * It alias to `addAttachment`.
      *
-     * @param  array  $attachment
+     * @param  mixed  $attachment
      * @return $this
      */
     public function add($attachment)
@@ -477,7 +432,6 @@ class Message implements JsonSerializable
     /**
      * Remove attachment[s] for the message.
      *
-     * @param  mixed
      * @return $this
      */
     public function removeAttachments()
@@ -501,7 +455,6 @@ class Message implements JsonSerializable
      * Remove attachment[s] for the message.
      * It alias to `removeAttachments`.
      *
-     * @param  mixed
      * @return $this
      */
     public function remove()
@@ -537,9 +490,10 @@ class Message implements JsonSerializable
      * Convert any type to string.
      *
      * @param  mixed  $value
+     * @param  int  $jsonOptions
      * @return string
      */
-    protected function asString($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+    protected function stringValue($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
     {
         if (is_object($value)) {
             if (method_exists($value, '__toString')) {
