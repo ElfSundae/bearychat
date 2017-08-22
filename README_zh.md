@@ -1,8 +1,13 @@
 # BearyChat for PHP
 
-[![Latest Stable Version](https://poser.pugx.org/elfsundae/bearychat/version)](https://packagist.org/packages/elfsundae/bearychat)
-[![Total Downloads](https://poser.pugx.org/elfsundae/bearychat/downloads)](https://packagist.org/packages/elfsundae/bearychat)
-[![License](https://poser.pugx.org/elfsundae/bearychat/license)](https://packagist.org/packages/elfsundae/bearychat)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/elfsundae/bearychat.svg?style=flat-square)](https://packagist.org/packages/elfsundae/bearychat)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/ElfSundae/bearychat/master.svg?style=flat-square)](https://travis-ci.org/ElfSundae/bearychat)
+[![StyleCI](https://styleci.io/repos/62389995/shield)](https://styleci.io/repos/62389995)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/830f8475-95b1-4353-a8e1-d19a1a3e16b3.svg?style=flat-square)](https://insight.sensiolabs.com/projects/830f8475-95b1-4353-a8e1-d19a1a3e16b3)
+[![Quality Score](https://img.shields.io/scrutinizer/g/ElfSundae/bearychat.svg?style=flat-square)](https://scrutinizer-ci.com/g/ElfSundae/bearychat)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ElfSundae/bearychat/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/ElfSundae/bearychat/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/elfsundae/bearychat.svg?style=flat-square)](https://packagist.org/packages/elfsundae/bearychat)
 
 这是一个用于向 [BearyChat][] 发送 [Incoming][1] 消息、创建 [Outgoing][2] 响应的 PHP 扩展包。
 

@@ -1,8 +1,13 @@
 # BearyChat for PHP
 
-[![Latest Stable Version](https://poser.pugx.org/elfsundae/bearychat/version)](https://packagist.org/packages/elfsundae/bearychat)
-[![Total Downloads](https://poser.pugx.org/elfsundae/bearychat/downloads)](https://packagist.org/packages/elfsundae/bearychat)
-[![License](https://poser.pugx.org/elfsundae/bearychat/license)](https://packagist.org/packages/elfsundae/bearychat)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/elfsundae/bearychat.svg?style=flat-square)](https://packagist.org/packages/elfsundae/bearychat)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/ElfSundae/bearychat/master.svg?style=flat-square)](https://travis-ci.org/ElfSundae/bearychat)
+[![StyleCI](https://styleci.io/repos/62389995/shield)](https://styleci.io/repos/62389995)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/830f8475-95b1-4353-a8e1-d19a1a3e16b3.svg?style=flat-square)](https://insight.sensiolabs.com/projects/830f8475-95b1-4353-a8e1-d19a1a3e16b3)
+[![Quality Score](https://img.shields.io/scrutinizer/g/ElfSundae/bearychat.svg?style=flat-square)](https://scrutinizer-ci.com/g/ElfSundae/bearychat)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ElfSundae/bearychat/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/ElfSundae/bearychat/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/elfsundae/bearychat.svg?style=flat-square)](https://packagist.org/packages/elfsundae/bearychat)
 
 A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1], and creating response payload for the [Outgoing Robot][2].
 
@@ -111,7 +116,7 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 ### Message Representation
 
-Call the `toArray()` method on a Message instance will get the payload array for this message. You may use `$message->toJson()`, `json_encode($message)` or `(string) $message` to get the JSON payload for `$message`. 
+Call the `toArray()` method on a Message instance will get the payload array for this message. You may use `$message->toJson()`, `json_encode($message)` or `(string) $message` to get the JSON payload for `$message`.
 
 > :warning: **The message payload may be used for requesting an [Incoming Webhook][1] or creating response for an [Outgoing Robot][2].**
 
