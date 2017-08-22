@@ -1,27 +1,39 @@
 {
     "name": "elfsundae/bearychat",
-    "description": "A PHP package for sending message to the BearyChat with the Incoming Webhook, and creating response payload for the Outgoing Robot.",
+    "description": "An elegant way of interacting with BearyChat webhooks.",
     "keywords": ["bearychat", "incoming", "webhook", "outgoing", "robot"],
-    "license": "MIT",
     "homepage": "https://github.com/ElfSundae/BearyChat",
+    "license": "MIT",
     "authors": [
         {
             "name": "Elf Sundae",
-            "email": "elf.sundae@gmail.com"
+            "email": "elf.sundae@gmail.com",
+            "homepage": "https://0x123.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "~6.0|~5.3"
+        "guzzlehttp/guzzle": "~5.3|~6.0"
     },
-    "suggest": {
-        "elfsundae/laravel-bearychat": "Required for Laravel integration."
+    "require-dev": {
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~5.7"
     },
     "autoload": {
         "psr-4": {
             "ElfSundae\\BearyChat\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "autoload-dev": {
+        "psr-4": {
+            "ElfSundae\\BearyChat\\Test\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "suggest": {
+        "elfsundae/laravel-bearychat": "Required for Laravel integration."
+    }
 }
