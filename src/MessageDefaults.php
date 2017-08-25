@@ -7,14 +7,16 @@ final class MessageDefaults
     /**
      * The default channel will be sent to.
      *
-     * 默认的讨论组名称。如果有该字段并且该讨论组对于机器人创建者可见，消息会发送到指定讨论组中。
+     * 默认的讨论组名称。如果有该字段并且该讨论组对于机器人创建�
+     * 可见，消息会发送到指定讨论组中。
      */
     const CHANNEL = 'channel';
 
     /**
      * The default user will be sent to.
      *
-     * 默认的用户名。在没有指定 channel 的情况下，如果有该字段并且该团队中有对应用户名的成员，
+     * 默认的用户名。在没有指定 channel 的�
+     * 况下，如果有该字段并且该团队中有对应用户名的成员，
      * 消息将会发送到该成员和 BearyBot 的私聊会话中。
      */
     const USER = 'user';

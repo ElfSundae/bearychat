@@ -126,7 +126,7 @@ class Client
                 'body' => $payload,
             ]);
 
-            return (200 === $response->getStatusCode());
+            return 200 === $response->getStatusCode();
         }
 
         return false;
