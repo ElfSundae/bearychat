@@ -564,7 +564,6 @@ class Message implements JsonSerializable
      * The parameters can also be
      * `($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`.
      *
-     * @param mixed
      * @return bool
      */
     public function send()
@@ -604,7 +603,7 @@ class Message implements JsonSerializable
     /**
      * Send the message to the given target.
      *
-     * @param  string|mixed  $target
+     * @param  mixed  $target
      * @return bool
      */
     public function sendTo($target)
