@@ -81,7 +81,7 @@ $client->sendTo('all', 'Hello', 'World');
 + **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
 + **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
 + **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
-+ **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `removeAttachments(...)` , `remove(...)`
++ **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
 
 如你所见，`to($target)` 方法可以改变消息的目标（接收方），如果参数 `$target` 是一个以 `@` 打头的字符串，消息将被发送至某个“人”（ user ），否则消息的目标将是一个“讨论组”（ channel ）。讨论组名字的打头字符 `#` 是可选的，这意味着 `to('#dev')` 和 `to('dev')` 效果一样。
 
