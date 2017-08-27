@@ -60,7 +60,7 @@ $json = '{"text": "Good job :+1:", "channel": "all"}';
 $client->sendMessage($json);
 ```
 
-In addition to the ugly payload, `sendMessage` can handle `JsonSerializable` instances or any object which provides a payload via its `toArray` or `toJson` method. And there is a ready-made [`Message`](src/Message.php) class available for creating payloads for Incoming messages or Outgoing responses. There are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class.
+In addition to the ugly payload, `sendMessage` can handle any `JsonSerializable` instances or any object which provides a payload via its `toArray` or `toJson` method. And there is a ready-made [`Message`](src/Message.php) class available for creating payloads for Incoming messages or Outgoing responses. There are a variety of convenient methods that can work with the payload in [`Message`](src/Message.php) class.
 
 For convenience, any unhandled methods called to a `Client` instance will be sent to a new `Message` instance, and the most methods of a `Message` instance return itself, so you can chain [message modifications](#message-modifications) to achieve one-liner code.
 
