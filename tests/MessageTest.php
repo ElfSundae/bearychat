@@ -4,10 +4,16 @@ namespace ElfSundae\BearyChat\Test;
 
 use Mockery as m;
 use ElfSundae\BearyChat\Client;
+use PHPUnit\Framework\TestCase;
 use ElfSundae\BearyChat\Message;
 
 class MessageTest extends TestCase
 {
+    protected function tearDown()
+    {
+        m::close();
+    }
+
     public function testInstantiation()
     {
         $this->assertInstanceOf(Message::class, new Message);

@@ -3,6 +3,7 @@
 namespace ElfSundae\BearyChat\Test;
 
 use ElfSundae\BearyChat\Client;
+use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
 {
