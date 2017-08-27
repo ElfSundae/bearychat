@@ -383,7 +383,7 @@ class Message implements JsonSerializable
                         $images[] = ['url' => $img];
                     }
                 }
-                if ($images) {
+                if (! empty($images)) {
                     $attachment['images'] = $images;
                 }
             } elseif ($index === 3) {
