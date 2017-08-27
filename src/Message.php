@@ -432,12 +432,12 @@ class Message implements JsonSerializable
      * Add an image attachment to the message.
      *
      * @param  string|string[]  $image
-     * @param  string  $title
+     * @param  string  $desc
      * @return $this
      */
-    public function addImage($image, $title = null)
+    public function addImage($image, $desc = null)
     {
-        return $this->addAttachment(null, $title, $image);
+        return $this->addAttachment($desc, null, $image);
     }
 
     /**

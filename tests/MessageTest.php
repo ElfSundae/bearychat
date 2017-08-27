@@ -361,7 +361,7 @@ class MessageTest extends TestCase
         $message = (new Message)->addImage('foo', 'bar');
         $this->assertEquals([
             'attachments' => [[
-                'title' => 'bar',
+                'text' => 'bar',
                 'images' => [['url' => 'foo']],
             ]],
         ], $message->toArray());
