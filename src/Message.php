@@ -429,6 +429,18 @@ class Message implements JsonSerializable
     }
 
     /**
+     * Add an image attachment to the message.
+     *
+     * @param  string|string[]  $image
+     * @param  string  $title
+     * @return $this
+     */
+    public function addImage($image, $title = null)
+    {
+        return $this->addAttachment(null, $title, $image);
+    }
+
+    /**
      * Remove attachment[s] for the message.
      *
      * @return $this

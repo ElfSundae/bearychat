@@ -108,7 +108,7 @@ class MessageTest extends TestCase
         $this->assertEquals([['foo' => 'bar']], $message->getAttachments());
 
         $message = (new Message)->addAttachment(123);
-        $this->assertSame([['text' => '123']], $message->getAttachments());
+        $this->assertEquals([['text' => '123']], $message->getAttachments());
 
         $message = (new Message)->add(null);
         $this->assertEmpty($message->getAttachments());
@@ -340,6 +340,31 @@ class MessageTest extends TestCase
             ->andReturn(true)
             ->mock();
         $this->assertTrue((new Message($client))->sendTo('@elf', 'foobar', false));
+    }
+
+    public function testAddImage()
+    {
+        $message = (new Message)->addImage('path/to/image');
+        $this->assertEquals([
+            'attachments' => [[
+                'images' => [['url' => 'path/to/image']],
+            ]],
+        ], $message->toArray());
+
+        $message = (new Message)->addImage(['foo', 'bar']);
+        $this->assertEquals([
+            'attachments' => [[
+                'images' => [['url' => 'foo'], ['url' => 'bar']],
+            ]],
+        ], $message->toArray());
+
+        $message = (new Message)->addImage('foo', 'bar');
+        $this->assertEquals([
+            'attachments' => [[
+                'title' => 'bar',
+                'images' => [['url' => 'foo']],
+            ]],
+        ], $message->toArray());
     }
 
     protected function getClient($defaults = ['user' => 'elf', 'notification' => 'noti', 'attachment_color' => '#f00'])
