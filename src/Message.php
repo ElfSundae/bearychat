@@ -421,10 +421,9 @@ class Message implements JsonSerializable
      * Add an attachment to the message.
      * It alias to `addAttachment`.
      *
-     * @param  mixed  $attachment
      * @return $this
      */
-    public function add($attachment)
+    public function add()
     {
         return call_user_func_array([$this, 'addAttachment'], func_get_args());
     }
