@@ -2,6 +2,8 @@
 
 namespace ElfSundae\BearyChat\Test;
 
+use Mockery as m;
+use ElfSundae\BearyChat\Client;
 use ElfSundae\BearyChat\Message;
 
 class MessageTest extends TestCase
@@ -161,5 +163,181 @@ class MessageTest extends TestCase
                 ['text' => 'bar'],
             ],
         ], $message->toArray());
+    }
+
+    public function testCreateMessageWithDefaultsFromClient()
+    {
+        $client = $this->getClient()->mock();
+
+        $message = (new Message($client))->text('msg')->add('attach');
+        $this->assertEquals('elf', $message->getUser());
+        $this->assertEquals('noti', $message->getNotification());
+        $this->assertEquals([
+            'user' => 'elf',
+            'notification' => 'noti',
+            'text' => 'msg',
+            'attachments' => [
+                ['text' => 'attach', 'color' => '#f00'],
+            ],
+        ], $message->toArray());
+    }
+
+    public function testSend()
+    {
+        $client = $this->getClient()
+            ->shouldReceive('sendMessage')
+            ->with(m::type(Message::class))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        $this->assertTrue((new Message($client))->send());
+
+        $client = $this->getClient()
+            ->shouldReceive('sendMessage')
+            ->with(['foo' => 'bar'])
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send(['foo' => 'bar']);
+
+        $obj = new \stdClass;
+        $client = $this->getClient()
+            ->shouldReceive('sendMessage')
+            ->with($obj)
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send($obj);
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg'];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg');
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg', 'markdown' => false];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg', false);
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg', 'markdown' => false, 'notification' => 'noti'];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg', false, 'noti');
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg', 'attachments' => [['text' => 'attach']]];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg', 'attach');
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg', 'attachments' => [['text' => 'attach', 'title' => 'attach_title']]];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg', 'attach', 'attach_title');
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg', 'attachments' => [['text' => 'attach', 'title' => 'attach_title', 'images' => [['url' => 'path/to/image']]]]];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg', 'attach', 'attach_title', 'path/to/image');
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['text' => 'msg', 'attachments' => [['text' => 'attach', 'title' => 'attach_title', 'images' => [['url' => 'path/to/image']], 'color' => '#fcc']]];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        (new Message($client))->send('msg', 'attach', 'attach_title', 'path/to/image', '#fcc');
+    }
+
+    public function testSendTo()
+    {
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['channel' => 'foo'];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        $this->assertTrue((new Message($client))->sendTo('foo'));
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['user' => 'elf'];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        $this->assertTrue((new Message($client))->sendTo('@elf'));
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == [];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        $this->assertTrue((new Message($client))->sendTo(null));
+
+        $client = $this->getClient([])
+            ->shouldReceive('sendMessage')
+            ->with(m::on(function ($message) {
+                return $message instanceof Message &&
+                    $message->toArray() == ['user' => 'elf', 'text' => 'foobar', 'markdown' => false];
+            }))
+            ->once()
+            ->andReturn(true)
+            ->mock();
+        $this->assertTrue((new Message($client))->sendTo('@elf', 'foobar', false));
+    }
+
+    protected function getClient($defaults = ['user' => 'elf', 'notification' => 'noti', 'attachment_color' => '#f00'])
+    {
+        return m::mock(Client::class)
+            ->shouldReceive('getMessageDefaults')
+            ->andReturn($defaults);
     }
 }
