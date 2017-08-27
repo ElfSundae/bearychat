@@ -184,6 +184,8 @@ class MessageTest extends TestCase
 
     public function testSend()
     {
+        $this->assertFalse((new Message)->send());
+
         $client = $this->getClient()
             ->shouldReceive('sendMessage')
             ->with(m::type(Message::class))
