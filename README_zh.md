@@ -29,10 +29,19 @@ composer require elfsundae/bearychat
 
 ### 概述
 
+```php
+(new Client('https://hook.bearychat.com/=...'))
+    ->text('content')
+    ->notification('New message!')
+    ->add('attachment', 'title')
+    ->addImage($imageUrl, 'Image description')
+    ->sendTo('admin');
+```
+
 要发送消息，首先需要创建一个 [BearyChat client](src/Client.php) ，并在其初始化方法中传入 webhook 的 URL:
 
 ```php
-$client = new \ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incoming/...');
+$client = new ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incoming/...');
 ```
 
 除了 webhook URL ，你还可以为所有由这个 client 发出的消息预设一些默认值：

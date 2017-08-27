@@ -29,10 +29,19 @@ Then you may create an Incoming Robot on your [BearyChat][] team account, and re
 
 ### Overview
 
+```php
+(new Client('https://hook.bearychat.com/=...'))
+    ->text('content')
+    ->notification('New message!')
+    ->add('attachment', 'title')
+    ->addImage($imageUrl, 'Image description')
+    ->sendTo('admin');
+```
+
 To send messages, first create a [BearyChat client](src/Client.php) with your webhook URL:
 
 ```php
-$client = new \ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incoming/...');
+$client = new ElfSundae\BearyChat\Client('http://hook.bearychat.com/=.../incoming/...');
 ```
 
 Besides the webhook, you may want to setup some default values for all messages which will be sent with this client:
