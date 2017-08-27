@@ -212,6 +212,12 @@ $client->webhook($webhook_ios)->setMessageDefaults([
 ])->send('App reviewing status has updated.');
 ```
 
+## 测试
+
+```sh
+$ composer test
+```
+
 ## 许可协议
 
 BearyChat PHP 扩展包在 [MIT 许可协议](LICENSE)下提供和使用。
