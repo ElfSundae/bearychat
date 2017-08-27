@@ -2,6 +2,6 @@
 
 All notable changes to `elfsundae/bearychat` will be documented in this file.
 
-## 1.0.0 - YYYY/mm/dd
+## 1.1.14 - 2017.08.28
 
-- Initial release
+- Add `Message::addImage` method
