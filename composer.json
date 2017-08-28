@@ -2,7 +2,7 @@
     "name": "elfsundae/bearychat",
     "description": "An elegant way of interacting with BearyChat webhooks.",
     "keywords": ["bearychat", "incoming", "webhook", "outgoing", "robot"],
-    "homepage": "https://github.com/ElfSundae/BearyChat",
+    "homepage": "https://github.com/ElfSundae/bearychat",
     "license": "MIT",
     "authors": [
         {
