@@ -9,12 +9,12 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ElfSundae/bearychat/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/ElfSundae/bearychat/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/elfsundae/bearychat.svg?style=flat-square)](https://packagist.org/packages/elfsundae/bearychat)
 
-A PHP package for sending message to the [BearyChat][] with the [Incoming Webhook][1], and creating response payload for the [Outgoing Robot][2].
+A PHP package for sending message to [BearyChat][] with the [Incoming Webhook][incoming], and creating response payload for the [Outgoing Robot][outgoing].
 
-+ :cn: [**中文文档**](README_zh.md)
-+ **Laravel integration:** [BearyChat for Laravel][Laravel-BearyChat]
-+ **Laravel Notification Channel:** [BearyChatChannel][]
-+ **Yii integration:** [BearyChat for Yii 2][Yii2-BearyChat]
+- :cn: [**中文文档**](README_zh.md)
+- **Laravel integration:** [BearyChat for Laravel](https://github.com/ElfSundae/laravel-bearychat)
+- **Laravel Notification Channel:** [BearyChatChannel](https://github.com/laravel-notification-channels/bearychat)
+- **Yii integration:** [BearyChat for Yii 2](https://github.com/krissss/yii2-beary-chart)
 
 ## Installation
 
@@ -23,7 +23,7 @@ You can install this package using the [Composer][] manager.
 composer require elfsundae/bearychat
 ```
 
-Then you may create an Incoming Robot on your [BearyChat][] team account, and read the [payload format][1].
+Then you may create an Incoming Robot on your [BearyChat][] team account, and read the [payload format][incoming].
 
 ## Documentation
 
@@ -57,7 +57,7 @@ $client = new Client($webhook, [
 
 All defaults keys are listed in [`MessageDefaults`](src/MessageDefaults.php) . You can access message default with `$client->getMessageDefaults($key)`, or retrieve all defaults with `$client->getMessageDefaults()` .
 
-To send a message, just call `sendMessage` on the client instance with a [message payload][1] array or a payload JSON string:
+To send a message, just call `sendMessage` on the client instance with a [message payload][incoming] array or a payload JSON string:
 
 ```php
 $client->sendMessage([
@@ -85,12 +85,12 @@ $client->sendTo('all', 'Hello', 'World');
 
 Available methods for message modification in the `Message` class:
 
-+ **text**: `getText` , `setText($text)` , `text($text)`
-+ **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
-+ **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
-+ **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
-+ **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
-+ **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
+- **text**: `getText` , `setText($text)` , `text($text)`
+- **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
+- **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
+- **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
+- **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
+- **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
 
 As you can see, the `to($target)` method can change the message's target to an user if `$target` is started with `@` , otherwise it will set the channel that the message should be sent to. The channel's starter mark `#` is **optional** in `to` method, which means the result of `to('#dev')` and `to('dev')` is the same.
 
@@ -127,7 +127,7 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 Call the `toArray()` method on a Message instance will get the payload array for this message. You may use `$message->toJson()`, `json_encode($message)` or `(string) $message` to get the JSON payload for `$message`.
 
-> :warning: **The message payload may be used for requesting an [Incoming Webhook][1] or creating response for an [Outgoing Robot][2].**
+> :warning: **The message payload may be used for requesting an [Incoming Webhook][incoming] or creating response for an [Outgoing Robot][outgoing].**
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
@@ -164,8 +164,8 @@ You can call `send` or `sendTo` method on a Message instance to send that messag
 
 The `send` method optional accepts variable number of arguments to quickly change the payload content:
 
-+ Sending a basic message: `send($text, $markdown = true, $notification)`
-+ Sending a message with one attachment added: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
+- Sending a basic message: `send($text, $markdown = true, $notification)`
+- Sending a message with one attachment added: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
 
 The `sendTo` method is useful when you want to change the message's target before calling `send` method.
 
@@ -224,10 +224,7 @@ $ composer test
 
 The BearyChat PHP package is available under the [MIT license](LICENSE).
 
-[1]: https://bearychat.com/integrations/incoming
-[2]: https://bearychat.com/integrations/outgoing
+[incoming]: https://bearychat.com/integrations/incoming
+[outgoing]: https://bearychat.com/integrations/outgoing
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
-[Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
-[Yii2-BearyChat]: https://github.com/krissss/yii2-beary-chart
-[BearyChatChannel]: https://github.com/laravel-notification-channels/bearychat

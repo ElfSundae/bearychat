@@ -9,12 +9,12 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ElfSundae/bearychat/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/ElfSundae/bearychat/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/elfsundae/bearychat.svg?style=flat-square)](https://packagist.org/packages/elfsundae/bearychat)
 
-这是一个用于向 [BearyChat][] 发送 [Incoming][1] 消息、创建 [Outgoing][2] 响应的 PHP 扩展包。
+这是一个用于向 [BearyChat][] 发送 [Incoming][incoming] 消息、创建 [Outgoing][outgoing] 响应的 PHP 扩展包。
 
-+ :us: [**Documentation in English**](README.md)
-+ **Laravel 集成:** [BearyChat for Laravel][Laravel-BearyChat]
-+ **Laravel Notification Channel:** [BearyChatChannel][]
-+ **Yii 集成:** [BearyChat for Yii 2][Yii2-BearyChat]
+- :us: [**Documentation in English**](README.md)
+- **Laravel 集成:** [BearyChat for Laravel](https://github.com/ElfSundae/laravel-bearychat)
+- **Laravel Notification Channel:** [BearyChatChannel](https://github.com/laravel-notification-channels/bearychat)
+- **Yii 集成:** [BearyChat for Yii 2](https://github.com/krissss/yii2-beary-chart)
 
 ## 安装
 
@@ -23,7 +23,7 @@
 composer require elfsundae/bearychat
 ```
 
-在你的 [BearyChat][] 团队账号下创建 Incoming 机器人，并阅读其[消息格式][1]。
+在你的 [BearyChat][] 团队账号下创建 Incoming 机器人，并阅读其[消息格式][incoming]。
 
 ## 文档
 
@@ -57,7 +57,7 @@ $client = new Client($webhook, [
 
 所有支持的消息预设名 (key) 罗列在 [`MessageDefaults`](src/MessageDefaults.php) 类中。可以通过调用 `$client->getMessageDefaults($key)` 获取某个预设值，或者调用 `$client->getMessageDefaults()` （不传参数）来获取所有消息预设值。
 
-要发送一条消息，只需调用 client 的 `sendMessage` 方法并传入[消息 payload][1] 数组或 JSON 字符串:
+要发送一条消息，只需调用 client 的 `sendMessage` 方法并传入[消息 payload][incoming] 数组或 JSON 字符串:
 
 ```php
 $client->sendMessage([
@@ -85,12 +85,12 @@ $client->sendTo('all', 'Hello', 'World');
 
 `Message` 对象可用的编辑消息的方法如下：
 
-+ **text**: `getText` , `setText($text)` , `text($text)`
-+ **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
-+ **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
-+ **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
-+ **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
-+ **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
+- **text**: `getText` , `setText($text)` , `text($text)`
+- **notification**: `getNotification` , `setNotification($notification)` , `notification($notification)`
+- **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
+- **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
+- **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
+- **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
 
 如你所见，`to($target)` 方法可以改变消息的目标（接收方），如果参数 `$target` 是一个以 `@` 打头的字符串，消息将被发送至某个“人”（ user ），否则消息的目标将是一个“讨论组”（ channel ）。讨论组名字的打头字符 `#` 是可选的，这意味着 `to('#dev')` 和 `to('dev')` 效果一样。
 
@@ -127,7 +127,7 @@ $message->remove(0)->remove(0, 1)->remove([1, 3])->remove();
 
 调用 `Message` 对象的 `toArray()` 方法可以得到这个消息的 payload 数组。也可以使用 `$message->toJson()`, `json_encode($message)` 或 `(string) $message` 得到 `$message` 的 JSON payload.
 
-> :warning: **消息 payload 可以被用来请求 [Incoming Webhook][1] 或响应 [Outgoing Robot][2].**
+> :warning: **消息 payload 可以被用来请求 [Incoming Webhook][incoming] 或响应 [Outgoing Robot][outgoing].**
 
 ```php
 $message = $client->to('@elf')->text('foo')->markdown(false)
@@ -162,8 +162,8 @@ echo $message->toJson(JSON_PRETTY_PRINT);
 
 调用 `Message` 对象的 `send` 或 `sendTo` 方法可以发送这条消息，并且这两个方法也接受可变参数以便快速修改消息内容。
 
-+ 发送一条简单的消息: `send($text, $markdown = true, $notification)`
-+ 发送一条带有附件的消息: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
+- 发送一条简单的消息: `send($text, $markdown = true, $notification)`
+- 发送一条带有附件的消息: `send($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
 
 `sendTo` 方法的第一个参数是要发送的目标，其他参数跟 `send` 方法的参数一样。
 
@@ -222,10 +222,7 @@ $ composer test
 
 BearyChat PHP 扩展包在 [MIT 许可协议](LICENSE)下提供和使用。
 
-[1]: https://bearychat.com/integrations/incoming
-[2]: https://bearychat.com/integrations/outgoing
+[incoming]: https://bearychat.com/integrations/incoming
+[outgoing]: https://bearychat.com/integrations/outgoing
 [BearyChat]: https://bearychat.com
 [Composer]: https://getcomposer.org
-[Laravel-BearyChat]: https://github.com/ElfSundae/Laravel-BearyChat
-[Yii2-BearyChat]: https://github.com/krissss/yii2-beary-chart
-[BearyChatChannel]: https://github.com/laravel-notification-channels/bearychat
