@@ -1,6 +1,4 @@
-# Changelog
-
-All notable changes to `elfsundae/bearychat` will be documented in this file.
+# Release Notes
 
 ## 1.2.0 (2017-08-28)
 
