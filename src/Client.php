@@ -79,14 +79,18 @@ class Client
     /**
      * Retrieve message defaults.
      *
-     * @param  string|null  $option
+     * @param  string|null  $key
      * @return mixed
      */
-    public function getMessageDefaults($option = null)
+    public function getMessageDefaults($key = null)
     {
-        return is_null($option) ?
-            $this->messageDefaults :
-            (isset($this->messageDefaults[$option]) ? $this->messageDefaults[$option] : null);
+        if (is_null($key)) {
+            return $this->messageDefaults;
+        }
+
+        if (isset($this->messageDefaults[$key])) {
+            return $this->messageDefaults[$key];
+        }
     }
 
     /**
