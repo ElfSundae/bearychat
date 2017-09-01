@@ -6,6 +6,7 @@ use Exception;
 use Mockery as m;
 use ElfSundae\BearyChat\Client;
 use PHPUnit\Framework\TestCase;
+use ElfSundae\BearyChat\Message;
 use GuzzleHttp\Client as HttpClient;
 
 class ClientTest extends TestCase
@@ -88,6 +89,14 @@ class ClientTest extends TestCase
 
         $this->expectException(MyException::class);
         $client->sendMessage(json_encode(['text' => 'msg']));
+    }
+
+    public function testDynamicCall()
+    {
+        $client = new Client;
+        $message = $client->text('foo');
+        $this->assertInstanceOf(Message::class, $message);
+        $this->assertSame($client, $message->getClient());
     }
 }
 
