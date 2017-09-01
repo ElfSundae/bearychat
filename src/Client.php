@@ -135,7 +135,7 @@ class Client
      */
     public function sendMessage($message)
     {
-        if ($payload = $this->getPayload($message)) {
+        if ($payload = $this->getJsonPayload($message)) {
             $response = $this->getHttpClient()
                 ->post($this->getWebhook(), [
                     'headers' => ['Content-Type' => 'application/json'],
@@ -149,12 +149,12 @@ class Client
     }
 
     /**
-     * Get the payload from an object.
+     * Get the JSON payload from an object.
      *
      * @param  mixed  $message
      * @return string
      */
-    protected function getPayload($message)
+    protected function getJsonPayload($message)
     {
         if ($message instanceof JsonSerializable) {
             return json_encode($message);
