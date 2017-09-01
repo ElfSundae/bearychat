@@ -158,17 +158,11 @@ class Client
     {
         if (is_array($message) || $message instanceof JsonSerializable) {
             return json_encode($message);
-        }
-
-        if (method_exists($message, 'toJson')) {
+        } elseif (method_exists($message, 'toJson')) {
             return $message->toJson();
-        }
-
-        if (method_exists($message, 'toArray')) {
+        } elseif (method_exists($message, 'toArray')) {
             return json_encode($message->toArray());
-        }
-
-        if (is_string($message) && is_array(json_decode($message, true))) {
+        } elseif (is_string($message) && is_array(json_decode($message, true))) {
             return $message;
         }
     }
