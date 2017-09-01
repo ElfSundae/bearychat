@@ -417,7 +417,7 @@ class Message implements JsonSerializable
     public function addAttachment($attachment)
     {
         if (! is_array($attachment)) {
-            $attachment = $this->getAttachmentPayloadFromArguments(func_get_args());
+            $attachment = call_user_func_array([$this, 'getAttachmentPayload'], func_get_args());
         }
 
         if (! empty($attachment)) {
@@ -430,43 +430,58 @@ class Message implements JsonSerializable
     }
 
     /**
-     * Convert arguments list to attachment payload.
+     * Get payload for an attachment.
      *
-     * @param  array  $arguments
+     * @param  mixed  $text
+     * @param  mixed  $title
+     * @param  mixed  $images
+     * @param  mixed  $color
      * @return array
      */
-    protected function getAttachmentPayloadFromArguments($arguments)
+    protected function getAttachmentPayload($text = null, $title = null, $images = null, $color = null)
     {
         $attachment = [];
 
-        foreach ($arguments as $index => $value) {
-            if (empty($value)) {
-                continue;
-            }
+        if ($text) {
+            $attachment['text'] = $this->stringValue($text);
+        }
 
-            if ($index === 0) {
-                $attachment['text'] = $this->stringValue($value);
-            } elseif ($index === 1) {
-                $attachment['title'] = $this->stringValue($value);
-            } elseif ($index === 2) {
-                $images = [];
-                foreach ((array) $value as $img) {
-                    if (is_array($img) && isset($img['url'])) {
-                        $img = $img['url'];
-                    }
-                    if (is_string($img) && ! empty($img)) {
-                        $images[] = ['url' => $img];
-                    }
-                }
-                if (! empty($images)) {
-                    $attachment['images'] = $images;
-                }
-            } elseif ($index === 3) {
-                $attachment['color'] = (string) $value;
-            }
+        if ($title) {
+            $attachment['title'] = $this->stringValue($title);
+        }
+
+        if ($images = $this->getImagesPayload($images)) {
+            $attachment['images'] = $images;
+        }
+
+        if ($color) {
+            $attachment['color'] = (string) $color;
         }
 
         return $attachment;
+    }
+
+    /**
+     * Get payload for images.
+     *
+     * @param  mixed  $value
+     * @return array
+     */
+    protected function getImagesPayload($value)
+    {
+        $images = [];
+
+        foreach ((array) $value as $img) {
+            if (is_array($img) && isset($img['url'])) {
+                $img = $img['url'];
+            }
+
+            if (is_string($img) && ! empty($img)) {
+                $images[] = ['url' => $img];
+            }
+        }
+
+        return $images;
     }
 
     /**
