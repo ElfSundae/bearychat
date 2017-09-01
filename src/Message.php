@@ -360,6 +360,7 @@ class Message implements JsonSerializable
     {
         if ($this->attachmentDefaults != ($defaults = (array) $defaults)) {
             $this->attachmentDefaults = $defaults;
+
             $this->setAttachments($this->attachments);
         }
 
