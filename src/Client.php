@@ -177,7 +177,7 @@ class Client
      * Get the http client.
      * @return \GuzzleHttp\Client
      */
-    protected function getHttpClient()
+    public function getHttpClient()
     {
         if (! $this->httpClient instanceof HttpClient) {
             $this->httpClient = new HttpClient;
