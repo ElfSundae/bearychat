@@ -171,6 +171,15 @@ class MessageTest extends TestCase
 
         $message = (new Message)->add('foo')->add('bar');
         $this->assertEquals([['text' => 'foo'], ['text' => 'bar']], $message->getAttachments());
+
+        $message = (new Message)->add(['images' => 'img']);
+        $this->assertEquals([['images' => [['url' => 'img']]]], $message->getAttachments());
+
+        $message = (new Message)->add(['images' => ['img', 'img1']]);
+        $this->assertEquals([['images' => [['url' => 'img'], ['url' => 'img1']]]], $message->getAttachments());
+
+        $message = (new Message)->add(['images' => ['url' => 'img']]);
+        $this->assertEquals([['images' => [['url' => 'img']]]], $message->getAttachments());
     }
 
     public function testMergeAttachmentDefaults()
