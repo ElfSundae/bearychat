@@ -157,20 +157,20 @@ class Client
     protected function getPayload($message)
     {
         if ($message instanceof JsonSerializable) {
-            $message = json_encode($message);
-        } elseif (is_object($message)) {
+            return json_encode($message);
+        }
+
+        if (is_object($message)) {
             if (method_exists($message, 'toJson')) {
-                $message = $message->toJson();
+                return $message->toJson();
             } elseif (method_exists($message, 'toArray')) {
-                $message = $message->toArray();
+                return json_encode($message->toArray());
             }
         }
 
-        if ($message && ! is_string($message)) {
-            $message = json_encode($message);
+        if (is_string($message) && is_array(json_decode($message))) {
+            return $message;
         }
-
-        return $message;
     }
 
     /**
