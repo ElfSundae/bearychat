@@ -70,7 +70,7 @@ class Message implements JsonSerializable
     public function __construct(Client $client = null)
     {
         if ($this->client = $client) {
-            $this->configureDefaults($client->getMessageDefaults());
+            $this->configureDefaults($client->getMessageDefaults(), true);
         }
     }
 
@@ -498,24 +498,58 @@ class Message implements JsonSerializable
      * Configure message defaults.
      *
      * @param  array  $defaults
+     * @param  bool  $force
+     * @return $this
      */
-    protected function configureDefaults(array $defaults)
+    public function configureDefaults(array $defaults, $force = false)
     {
-        if (isset($defaults[MessageDefaults::CHANNEL])) {
-            $this->setChannel($defaults[MessageDefaults::CHANNEL]);
+        if (! $force && ! empty($this->toArray())) {
+            return $this;
         }
-        if (isset($defaults[MessageDefaults::USER])) {
-            $this->setUser($defaults[MessageDefaults::USER]);
+
+        $attachmentDefaults = $this->attachmentDefaults;
+
+        foreach (MessageDefaults::allKeys() as $key) {
+            if (! isset($defaults[$key]) || is_null($value = $defaults[$key])) {
+                continue;
+            }
+
+            if (strpos($key, 'attachment_') !== false) {
+                if ($key = substr($key, strlen('attachment_'))) {
+                    $attachmentDefaults[$key] = $value;
+                }
+            } else {
+                if ($suffix = $this->studlyCase($key)) {
+                    $getMethod = 'get'.$suffix;
+                    $setMethod = 'set'.$suffix;
+                    if (
+                        method_exists($this, $getMethod) &&
+                        is_null($this->{$getMethod}()) &&
+                        method_exists($this, $setMethod)
+                    ) {
+                        $this->{$setMethod}($value);
+                    }
+                }
+            }
         }
-        if (isset($defaults[MessageDefaults::MARKDOWN])) {
-            $this->setMarkdown($defaults[MessageDefaults::MARKDOWN]);
+
+        if ($attachmentDefaults != $this->attachmentDefaults) {
+            $this->attachmentDefaults = $attachmentDefaults;
+            $this->setAttachments($this->attachments);
         }
-        if (isset($defaults[MessageDefaults::NOTIFICATION])) {
-            $this->setNotification($defaults[MessageDefaults::NOTIFICATION]);
-        }
-        if (isset($defaults[MessageDefaults::ATTACHMENT_COLOR])) {
-            $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
-        }
+
+        return $this;
+    }
+
+    /**
+     * Convert a string to studly caps case.
+     *
+     * @param  string  $string
+     * @return string
+     */
+    protected function studlyCase($string)
+    {
+        return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $string)));
     }
 
     /**
