@@ -156,7 +156,7 @@ class Client
      */
     protected function getJsonPayload($message)
     {
-        if ($message instanceof JsonSerializable) {
+        if (is_array($message) || $message instanceof JsonSerializable) {
             return json_encode($message);
         }
 
@@ -168,7 +168,7 @@ class Client
             }
         }
 
-        if (is_string($message) && is_array(json_decode($message))) {
+        if (is_string($message) && is_array(json_decode($message, true))) {
             return $message;
         }
     }
