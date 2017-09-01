@@ -32,10 +32,11 @@ composer require elfsundae/bearychat
 ```php
 (new Client('https://hook.bearychat.com/=...'))
     ->text('content')
-    ->notification('New message!')
     ->add('attachment', 'title')
-    ->addImage($imageUrl, 'Image description')
+    ->addImage($imageUrl, 'image description')
     ->sendTo('admin');
+
+(new Client($webhook))->send('content', 'attachment');
 ```
 
 要发送消息，首先需要创建一个 [BearyChat client](src/Client.php) ，并在其初始化方法中传入 webhook 的 URL:
@@ -99,24 +100,22 @@ $client->sendTo('all', 'Hello', 'World');
 方法 `addAttachment($attachment)` 可接受一个 PHP 数组 (attachment payload) 作为其参数，也可以是一个按照 `text, title, images, color` 顺序的可变参数，并且 `images` 可以是一个图片 URL 字符串也可以是一个包含图片 URL 的数组。`addAttachment` 的这种参数类型同样适应于 `add` 方法。
 
 ```php
-$client->to('@elf')
-->text('message')
-->add([
-    'text' => 'Content of the first attachment.',
-    'title' => 'First Attachment',
-    'images' => [
-        ['url' => $imageUrl],
-        ['url' => $imageUrl2]
-    ],
-    'color' => '#10e4fe'
-])
-->add(
-    'Content of the second attachment.',
-    'Second Attachment',
-    [$imageUrl, $imageUrl2],
-    'red'
-)
-->send();
+$client
+    ->to('@elf')
+    ->text('message')
+    ->add([
+        'text' => 'Content of the first attachment.',
+        'title' => 'First Attachment',
+        'images' => [$imageUrl, $imageUrl2],
+        'color' => '#10e4fe'
+    ])
+    ->add(
+        'Content of the second attachment.',
+        'Second Attachment',
+        [$imageUrl, $imageUrl2],
+        'red'
+    )
+    ->send();
 ```
 
 调用 `removeAttachments` 或 `remove` 方法并传入附件索引可以移除某附件。不传参数会移除消息里的所有附件。

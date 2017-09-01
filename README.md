@@ -32,10 +32,11 @@ Then you may create an Incoming Robot on your [BearyChat][] team account, and re
 ```php
 (new Client('https://hook.bearychat.com/=...'))
     ->text('content')
-    ->notification('New message!')
     ->add('attachment', 'title')
-    ->addImage($imageUrl, 'Image description')
+    ->addImage($imageUrl, 'image description')
     ->sendTo('admin');
+
+(new Client($webhook))->send('content', 'attachment');
 ```
 
 To send messages, first create a [BearyChat client](src/Client.php) with your webhook URL:
@@ -99,24 +100,22 @@ As you can see, the `to($target)` method can change the message's target to an u
 Method `addAttachment($attachment)` accepts a PHP array of attachment payload, or a variable arguments list in order of `text, title, images, color`, and the `images` can be an image URL or an array contains image URLs. And this type of attachment parameters is also applicable to the method `add`.
 
 ```php
-$client->to('@elf')
-->text('message')
-->add([
-    'text' => 'Content of the first attachment.',
-    'title' => 'First Attachment',
-    'images' => [
-        ['url' => $imageUrl],
-        ['url' => $imageUrl2]
-    ],
-    'color' => '#10e4fe'
-])
-->add(
-    'Content of the second attachment.',
-    'Second Attachment',
-    [$imageUrl, $imageUrl2],
-    'red'
-)
-->send();
+$client
+    ->to('@elf')
+    ->text('message')
+    ->add([
+        'text' => 'Content of the first attachment.',
+        'title' => 'First Attachment',
+        'images' => [$imageUrl, $imageUrl2],
+        'color' => '#10e4fe'
+    ])
+    ->add(
+        'Content of the second attachment.',
+        'Second Attachment',
+        [$imageUrl, $imageUrl2],
+        'red'
+    )
+    ->send();
 ```
 
 To remove attachments, call `removeAttachments` or `remove` with indices.
