@@ -92,6 +92,7 @@ Available methods for message modification in the `Message` class:
 - **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
 - **target** (user or channel): `getTarget`, `setTarget($target)`, `target($target)`, `removeTarget`, `to($target)`
 - **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
+- `content($text, $markdown, $notification)`, `content($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`
 
 As you can see, the `to($target)` method can change the message's target to an user if `$target` is started with `@` , otherwise it will set the channel that the message should be sent to. The channel's starter mark `#` is **optional** in `to` method, which means the result of `to('#dev')` and `to('dev')` is the same.
 
