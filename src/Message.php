@@ -409,9 +409,9 @@ class Message implements JsonSerializable
      * @param  array  $defaults
      * @return $this
      */
-    public function setAttachmentDefaults(array $defaults)
+    public function setAttachmentDefaults($defaults)
     {
-        $this->attachmentDefaults = $defaults;
+        $this->attachmentDefaults = (array) $defaults;
 
         return $this;
     }
