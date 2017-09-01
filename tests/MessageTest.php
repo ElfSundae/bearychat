@@ -476,6 +476,15 @@ class MessageTest extends TestCase
                 'images' => [['url' => 'foo']],
             ]],
         ], $message->toArray());
+
+        $message = (new Message)->addImage('foo', 'bar', 'title');
+        $this->assertEquals([
+            'attachments' => [[
+                'text' => 'bar',
+                'title' => 'title',
+                'images' => [['url' => 'foo']],
+            ]],
+        ], $message->toArray());
     }
 
     protected function getClient($defaults = ['user' => 'elf', 'notification' => 'noti', 'attachment_color' => '#f00'])

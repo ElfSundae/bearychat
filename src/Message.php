@@ -529,11 +529,12 @@ class Message implements JsonSerializable
      *
      * @param  string|string[]  $image
      * @param  string  $desc
+     * @param  string  $title
      * @return $this
      */
-    public function addImage($image, $desc = null)
+    public function addImage($image, $desc = null, $title = null)
     {
-        return $this->addAttachment($desc, null, $image);
+        return $this->addAttachment($desc, $title, $image);
     }
 
     /**
