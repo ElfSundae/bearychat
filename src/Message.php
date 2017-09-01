@@ -498,6 +498,10 @@ class Message implements JsonSerializable
      */
     protected function stringValue($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
     {
+        if (is_string($value)) {
+            return $value;
+        }
+
         if (method_exists($value, '__toString')) {
             return (string) $value;
         }
@@ -506,7 +510,7 @@ class Message implements JsonSerializable
             $value = $value->toArray();
         }
 
-        return is_string($value) ? $value : json_encode($value, $jsonOptions);
+        return json_encode($value, $jsonOptions);
     }
 
     /**
