@@ -188,6 +188,21 @@ class MessageTest extends TestCase
         ], $message->toArray());
     }
 
+    public function testConfigureDefaults()
+    {
+        $message = new Message;
+        $message->configureDefaults(['user' => 'elf']);
+        $this->assertEquals(['user' => 'elf'], $message->toArray());
+        $message->configureDefaults(['user' => 'sundae']);
+        $this->assertEquals(['user' => 'elf'], $message->toArray());
+        $message->configureDefaults(['user' => 'sundae'], true);
+        $this->assertEquals(['user' => 'elf'], $message->toArray());
+        $message->configureDefaults(['notification' => 'notes']);
+        $this->assertEquals(['user' => 'elf'], $message->toArray());
+        $message->configureDefaults(['notification' => 'notes'], true);
+        $this->assertEquals(['user' => 'elf', 'notification' => 'notes'], $message->toArray());
+    }
+
     public function testSend()
     {
         $this->assertFalse((new Message)->send());
