@@ -194,7 +194,7 @@ class MessageTest extends TestCase
         $this->assertEquals([['text' => 'foo']], $message->getAttachments());
 
         $attach = [['text' => 'foo'], ['title' => 'title']];
-        $message = (new Message)->setAttachments($attach);
+        $message = (new Message)->attachments($attach);
         $this->assertEquals($attach, $message->getAttachments());
     }
 
@@ -249,12 +249,19 @@ class MessageTest extends TestCase
         $message = new Message;
         $message->configureDefaults(['user' => 'elf']);
         $this->assertEquals(['user' => 'elf'], $message->toArray());
+
         $message->configureDefaults(['user' => 'sundae']);
         $this->assertEquals(['user' => 'elf'], $message->toArray());
+
         $message->configureDefaults(['user' => 'sundae'], true);
         $this->assertEquals(['user' => 'elf'], $message->toArray());
+
+        $message->configureDefaults(['channel' => 'channel'], true);
+        $this->assertEquals(['user' => 'elf'], $message->toArray());
+
         $message->configureDefaults(['notification' => 'notes']);
         $this->assertEquals(['user' => 'elf'], $message->toArray());
+
         $message->configureDefaults(['notification' => 'notes'], true);
         $this->assertEquals(['user' => 'elf', 'notification' => 'notes'], $message->toArray());
     }

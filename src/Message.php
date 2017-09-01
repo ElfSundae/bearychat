@@ -570,6 +570,12 @@ class Message implements JsonSerializable
                     $attachmentDefaults[$key] = $value;
                 }
             } else {
+                if (! is_null($this->getTarget()) &&
+                    ($key == MessageDefaults::USER || $key == MessageDefaults::CHANNEL)
+                ) {
+                    continue;
+                }
+
                 if ($suffix = $this->studlyCase($key)) {
                     $getMethod = 'get'.$suffix;
                     $setMethod = 'set'.$suffix;
