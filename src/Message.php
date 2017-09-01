@@ -477,7 +477,7 @@ class Message implements JsonSerializable
         $images = [];
 
         foreach ((array) $value as $img) {
-            if (is_array($img) && isset($img['url'])) {
+            if (! empty($img['url'])) {
                 $img = $img['url'];
             }
 
