@@ -635,6 +635,39 @@ class Message implements JsonSerializable
     }
 
     /**
+     * Conveniently set message content.
+     *
+     * The parameters may be:
+     * `($text, $markdown, $notification)`
+     * or `($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`.
+     *
+     * @return $this
+     */
+    public function content()
+    {
+        $arguments = func_get_args();
+        $count = count($arguments);
+
+        if ($count > 0) {
+            $this->setText($arguments[0]);
+        }
+
+        if ($count > 1) {
+            if (is_bool($arguments[1])) {
+                $this->setMarkdown($arguments[1]);
+
+                if ($count > 2) {
+                    $this->setNotification($arguments[2]);
+                }
+            } else {
+                call_user_func_array([$this, 'addAttachment'], array_slice($arguments, 1));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Convert the message to an array.
      *
      * @return array
@@ -685,10 +718,7 @@ class Message implements JsonSerializable
     /**
      * Send the message.
      *
-     * The parameters can be `($text, $markdown, $notification)`, and the $text and
-     * the $notification can be `null` that does not modify the exist field.
-     * The parameters can also be
-     * `($text, $attachment_text, $attachment_title, $attachment_images, $attachment_color)`.
+     * The parameters accepts the same format of `content` method.
      *
      * @return bool
      */
@@ -698,29 +728,15 @@ class Message implements JsonSerializable
             return false;
         }
 
-        if ($count = func_num_args()) {
-            $firstArg = func_get_arg(0);
+        if (
+            1 == func_num_args() &&
+            (is_array(func_get_arg(0)) || is_object(func_get_arg(0)))
+        ) {
+            return $this->client->sendMessage(func_get_arg(0));
+        }
 
-            if (1 === $count && (is_array($firstArg) || is_object($firstArg))) {
-                return $this->client->sendMessage($firstArg);
-            }
-
-            if (! is_null($firstArg)) {
-                $this->setText($firstArg);
-            }
-
-            if ($count > 1 && is_bool(func_get_arg(1))) {
-                $this->setMarkdown(func_get_arg(1));
-
-                if ($count > 2 && ! is_null(func_get_arg(2))) {
-                    $this->setNotification(func_get_arg(2));
-                }
-            } elseif ($count > 1) {
-                call_user_func_array(
-                    [$this, 'addAttachment'],
-                    array_slice(func_get_args(), 1)
-                );
-            }
+        if (func_num_args() > 0) {
+            call_user_func_array([$this, 'content'], func_get_args());
         }
 
         return $this->client->sendMessage($this);
