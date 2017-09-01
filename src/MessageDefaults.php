@@ -2,6 +2,8 @@
 
 namespace ElfSundae\BearyChat;
 
+use ReflectionClass;
+
 final class MessageDefaults
 {
     /**
@@ -29,4 +31,20 @@ final class MessageDefaults
      * The default color for the attachments left separator.
      */
     const ATTACHMENT_COLOR = 'attachment_color';
+
+    /**
+     * Get the all possible keys.
+     *
+     * @return string[]
+     */
+    public static function allKeys()
+    {
+        static $allKeys = null;
+
+        if (is_null($allKeys)) {
+            $allKeys = array_values((new ReflectionClass(get_called_class()))->getConstants());
+        }
+
+        return $allKeys;
+    }
 }
