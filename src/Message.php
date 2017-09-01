@@ -417,10 +417,7 @@ class Message implements JsonSerializable
     public function addAttachment($attachment)
     {
         if (! is_array($attachment)) {
-            $attachment = call_user_func_array(
-                [$this, 'getAttachmentPayload'],
-                func_get_args()
-            );
+            $attachment = call_user_func_array([$this, 'getAttachmentPayload'], func_get_args());
         } elseif (
             ! empty($attachment['images']) &&
             $images = $this->getImagesPayload($attachment['images'])
