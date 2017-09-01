@@ -267,8 +267,7 @@ class Message implements JsonSerializable
      */
     public function to($target)
     {
-        $this->setChannel(null);
-        $this->setUser(null);
+        $this->channel = $this->user = null;
 
         if (! empty($target)) {
             $target = (string) $target;
