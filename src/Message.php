@@ -288,6 +288,29 @@ class Message implements JsonSerializable
     }
 
     /**
+     * Get the attachments defaults.
+     *
+     * @return array
+     */
+    public function getAttachmentDefaults()
+    {
+        return $this->attachmentDefaults;
+    }
+
+    /**
+     * Set the attachments defaults.
+     *
+     * @param  array  $defaults
+     * @return $this
+     */
+    public function setAttachmentDefaults($defaults)
+    {
+        $this->attachmentDefaults = (array) $defaults;
+
+        return $this;
+    }
+
+    /**
      * Get the attachments for the message.
      *
      * @return array
@@ -394,26 +417,25 @@ class Message implements JsonSerializable
     }
 
     /**
-     * Get the attachments' defaults.
+     * Convert any type to string.
      *
-     * @return array
+     * @param  mixed  $value
+     * @param  int  $jsonOptions
+     * @return string
      */
-    public function getAttachmentDefaults()
+    protected function stringValue($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
     {
-        return $this->attachmentDefaults;
-    }
+        if (is_object($value)) {
+            if (method_exists($value, '__toString')) {
+                return (string) $value;
+            }
 
-    /**
-     * Set the attachments' defaults.
-     *
-     * @param  array  $defaults
-     * @return $this
-     */
-    public function setAttachmentDefaults($defaults)
-    {
-        $this->attachmentDefaults = (array) $defaults;
+            if (method_exists($value, 'toArray')) {
+                $value = $value->toArray();
+            }
+        }
 
-        return $this;
+        return is_string($value) ? $value : json_encode($value, $jsonOptions);
     }
 
     /**
@@ -494,28 +516,6 @@ class Message implements JsonSerializable
         if (isset($defaults[MessageDefaults::ATTACHMENT_COLOR])) {
             $this->attachmentDefaults['color'] = $defaults[MessageDefaults::ATTACHMENT_COLOR];
         }
-    }
-
-    /**
-     * Convert any type to string.
-     *
-     * @param  mixed  $value
-     * @param  int  $jsonOptions
-     * @return string
-     */
-    protected function stringValue($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
-    {
-        if (is_object($value)) {
-            if (method_exists($value, '__toString')) {
-                return (string) $value;
-            }
-
-            if (method_exists($value, 'toArray')) {
-                $value = $value->toArray();
-            }
-        }
-
-        return is_string($value) ? $value : json_encode($value, $jsonOptions);
     }
 
     /**
