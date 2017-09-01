@@ -2,11 +2,19 @@
 
 namespace ElfSundae\BearyChat\Test;
 
+use Exception;
+use Mockery as m;
 use ElfSundae\BearyChat\Client;
 use PHPUnit\Framework\TestCase;
+use GuzzleHttp\Client as HttpClient;
 
 class ClientTest extends TestCase
 {
+    protected function tearDown()
+    {
+        m::close();
+    }
+
     public function testInstantiation()
     {
         $this->assertInstanceOf(Client::class, new Client);
@@ -28,6 +36,21 @@ class ClientTest extends TestCase
 
         $client->setMessageDefaults(['test' => 'demo']);
         $this->assertEquals(['test' => 'demo'], $client->getMessageDefaults());
+        $client->setMessageDefaults(null);
+        $this->assertEquals([], $client->getMessageDefaults());
+
+        $client = new Client;
+        $this->assertEquals([], $client->getMessageDefaults());
+
+        $client = new Client(null, null);
+        $this->assertEquals([], $client->getMessageDefaults());
+    }
+
+    public function testSetHttpClient()
+    {
+        $httpClient = new HttpClient;
+        $client = new Client(null, null, $httpClient);
+        $this->assertSame($httpClient, $client->getHttpClient());
     }
 
     public function testGetMessageDefaultsWithKey()
@@ -45,4 +68,29 @@ class ClientTest extends TestCase
         $message = $client->createMessage();
         $this->assertSame($client, $message->getClient());
     }
+
+    public function testSendMessageWithWrongParamter()
+    {
+        $client = new Client;
+        $this->assertFalse($client->sendMessage('foobar'));
+    }
+
+    public function testSendMessage()
+    {
+        $httpClient = m::mock(HttpClient::class)
+            ->shouldReceive('post')
+            ->once()
+            ->andThrow(MyException::class)
+            ->mock();
+
+        $client = new Client('fake:://webhook', [], $httpClient);
+        $this->assertSame($httpClient, $client->getHttpClient());
+
+        $this->expectException(MyException::class);
+        $client->sendMessage(json_encode(['text' => 'msg']));
+    }
+}
+
+class MyException extends Exception
+{
 }
