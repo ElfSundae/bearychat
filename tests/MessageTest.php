@@ -318,7 +318,7 @@ class MessageTest extends TestCase
                 'text' => 'attachment_text',
                 'title' => 'attachment_title',
                 'images' => [
-                    ['url' => 'image']
+                    ['url' => 'image'],
                 ],
                 'color' => '#fff',
             ]],
