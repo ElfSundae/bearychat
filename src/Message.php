@@ -204,7 +204,11 @@ class Message implements JsonSerializable
      */
     public function setChannel($channel)
     {
-        $this->channel = $channel ? (string) $channel : null;
+        $this->removeTarget();
+
+        if ($channel) {
+            $this->channel = (string) $channel;
+        }
 
         return $this;
     }
@@ -238,7 +242,11 @@ class Message implements JsonSerializable
      */
     public function setUser($user)
     {
-        $this->user = $user ? (string) $user : null;
+        $this->removeTarget();
+
+        if ($user) {
+            $this->user = (string) $user;
+        }
 
         return $this;
     }
@@ -255,29 +263,39 @@ class Message implements JsonSerializable
     }
 
     /**
+     * Get the target that the message should be sent to:
+     * `#channel` or `@user` or null.
+     *
+     * @return string
+     */
+    public function getTarget()
+    {
+        if ($this->channel) {
+            return '#'.$this->channel;
+        }
+
+        if ($this->user) {
+            return '@'.$this->user;
+        }
+    }
+
+    /**
      * Set the target (user or channel) that the message should be sent to.
      *
-     * The target may be started with '@' for sending to user, and the channel's
-     * starter mark '#' is optional.
-     *
-     * It will remove all targets if the given target is null.
-     *
-     * @param  string  $target
+     * @param  string  $target  @user, #channel, channel, null
      * @return $this
      */
-    public function to($target)
+    public function setTarget($target)
     {
-        $this->channel = $this->user = null;
+        $this->removeTarget();
 
-        if (! empty($target)) {
-            $target = (string) $target;
-
+        if ($target = (string) $target) {
             $mark = mb_substr($target, 0, 1);
             $to = mb_substr($target, 1);
 
-            if ($mark === '@' && ! empty($to)) {
+            if ($mark === '@') {
                 $this->setUser($to);
-            } elseif ($mark === '#' && ! empty($to)) {
+            } elseif ($mark === '#') {
                 $this->setChannel($to);
             } else {
                 $this->setChannel($target);
@@ -285,6 +303,41 @@ class Message implements JsonSerializable
         }
 
         return $this;
+    }
+
+    /**
+     * Remove the target, then this message will be sent to
+     * the webhook defined target.
+     *
+     * @return $this
+     */
+    public function removeTarget()
+    {
+        $this->channel = $this->user = null;
+
+        return $this;
+    }
+
+    /**
+     * Set the target.
+     *
+     * @param  string  $target
+     * @return $this
+     */
+    public function target($target)
+    {
+        return $this->setTarget($target);
+    }
+
+    /**
+     * Set the target.
+     *
+     * @param  string  $target
+     * @return $this
+     */
+    public function to($target)
+    {
+        return $this->setTarget($target);
     }
 
     /**

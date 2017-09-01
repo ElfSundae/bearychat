@@ -37,21 +37,77 @@ class MessageTest extends TestCase
 
     public function testSetChannel()
     {
-        $this->assertSame('foo', (new Message)->channel('foo')->getChannel());
+        $message = new Message;
+        $message->setChannel('foo');
+        $this->assertSame('foo', $message->getChannel());
+        $this->assertNull($message->getUser());
+
+        $message->setUser('user')->channel('bar');
+        $this->assertSame('bar', $message->getChannel());
+        $this->assertNull($message->getUser());
     }
 
     public function testSetUser()
     {
-        $this->assertSame('foo', (new Message)->user('foo')->getUser());
+        $message = new Message;
+        $message->setUser('user');
+        $this->assertSame('user', $message->getUser());
+        $this->assertNull($message->getChannel());
+
+        $message->channel('channel')->user('bar');
+        $this->assertSame('bar', $message->getUser());
+        $this->assertNull($message->getChannel());
     }
 
-    public function testTo()
+    public function testGetTarget()
     {
         $message = new Message;
-        $this->assertSame('foo', $message->to('@foo')->getUser());
-        $this->assertSame('foo', $message->to('#foo')->getChannel());
-        $this->assertSame('foo', $message->to('foo')->getChannel());
+        $this->assertNull($message->getTarget());
+        $this->assertSame('#foo', $message->channel('foo')->getTarget());
+        $this->assertSame('@bar', $message->user('bar')->getTarget());
+    }
+
+    public function testSetTarget()
+    {
+        $message = new Message;
+        $message->setTarget('@foo');
+        $this->assertSame('foo', $message->getUser());
+        $this->assertNull($message->getChannel());
+
+        $message->target('#bar');
+        $this->assertSame('bar', $message->getChannel());
         $this->assertNull($message->getUser());
+
+        $message->to('#xyz');
+        $this->assertSame('xyz', $message->getChannel());
+        $this->assertNull($message->getUser());
+
+        $message->user('abc')->to('123');
+        $this->assertSame('123', $message->getChannel());
+        $this->assertNull($message->getUser());
+
+        $message->user('abc')->to('#456');
+        $this->assertSame('456', $message->getChannel());
+        $this->assertNull($message->getUser());
+
+        $message->user('abc')->to('@789');
+        $this->assertSame('789', $message->getUser());
+        $this->assertNull($message->getChannel());
+
+        $message->to('@');
+        $this->assertNull($message->getUser());
+        $this->assertNull($message->getChannel());
+
+        $message->to('#');
+        $this->assertNull($message->getUser());
+        $this->assertNull($message->getChannel());
+    }
+
+    public function testRemoveTarget()
+    {
+        $message = new Message;
+        $this->assertNull($message->user('foo')->removeTarget()->getUser());
+        $this->assertNull($message->channel('foo')->removeTarget()->getChannel());
     }
 
     public function testSetAttachmentDefaults()

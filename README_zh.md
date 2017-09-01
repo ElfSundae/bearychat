@@ -90,9 +90,10 @@ $client->sendTo('all', 'Hello', 'World');
 - **markdown**: `getMarkdown` , `setMarkdown($markdown)` , `markdown($markdown = true)`
 - **channel**: `getChannel` , `setChannel($channel)` , `channel($channel)` , `to($channel)`
 - **user**: `getUser` , `setUser($user)` , `user($user)` , `to('@'.$user)`
+- **target** (user or channel): `getTarget`, `setTarget($target)`, `target($target)`, `removeTarget`, `to($target)`
 - **attachments**: `getAttachments` , `setAttachments($attachments)` , `attachments($attachments)` , `addAttachment(...)` , `add(...)` , `addImage` , `removeAttachments(...)` , `remove(...)`
 
-如你所见，`to($target)` 方法可以改变消息的目标（接收方），如果参数 `$target` 是一个以 `@` 打头的字符串，消息将被发送至某个“人”（ user ），否则消息的目标将是一个“讨论组”（ channel ）。讨论组名字的打头字符 `#` 是可选的，这意味着 `to('#dev')` 和 `to('dev')` 效果一样。
+如你所见，`to($target)` 方法可以改变消息的目标（接收方），如果参数 `$target` 是一个以 `@` 打头的字符串，消息将被发送至某个「人」（ user ），否则消息的目标将是一个「讨论组」（ channel ）。讨论组名字的打头字符 `#` 是可选的，这意味着 `to('#dev')` 和 `to('dev')` 效果一样。
 
 方法 `addAttachment($attachment)` 可接受一个 PHP 数组 (attachment payload) 作为其参数，也可以是一个按照 `text, title, images, color` 顺序的可变参数，并且 `images` 可以是一个图片 URL 字符串也可以是一个包含图片 URL 的数组。`addAttachment` 的这种参数类型同样适应于 `add` 方法。
 
