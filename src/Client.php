@@ -179,7 +179,7 @@ class Client
      */
     protected function getHttpClient()
     {
-        if (! ($this->httpClient instanceof HttpClient)) {
+        if (! $this->httpClient instanceof HttpClient) {
             $this->httpClient = new HttpClient;
         }
 
