@@ -34,6 +34,7 @@
         "test": "vendor/bin/phpunit"
     },
     "suggest": {
-        "elfsundae/laravel-bearychat": "Required for Laravel integration."
+        "elfsundae/laravel-bearychat": "Required for Laravel integration.",
+        "laravel-notification-channels/bearychat": "BearyChat notifications channel for Laravel 5."
     }
 }
