@@ -478,14 +478,12 @@ class Message implements JsonSerializable
      */
     protected function stringValue($value, $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
     {
-        if (is_object($value)) {
-            if (method_exists($value, '__toString')) {
-                return (string) $value;
-            }
+        if (method_exists($value, '__toString')) {
+            return (string) $value;
+        }
 
-            if (method_exists($value, 'toArray')) {
-                $value = $value->toArray();
-            }
+        if (method_exists($value, 'toArray')) {
+            $value = $value->toArray();
         }
 
         return is_string($value) ? $value : json_encode($value, $jsonOptions);

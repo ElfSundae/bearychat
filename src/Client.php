@@ -160,12 +160,12 @@ class Client
             return json_encode($message);
         }
 
-        if (is_object($message)) {
-            if (method_exists($message, 'toJson')) {
-                return $message->toJson();
-            } elseif (method_exists($message, 'toArray')) {
-                return json_encode($message->toArray());
-            }
+        if (method_exists($message, 'toJson')) {
+            return $message->toJson();
+        }
+
+        if (method_exists($message, 'toArray')) {
+            return json_encode($message->toArray());
         }
 
         if (is_string($message) && is_array(json_decode($message, true))) {
