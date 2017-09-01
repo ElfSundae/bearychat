@@ -136,12 +136,11 @@ class Client
     public function sendMessage($message)
     {
         if ($payload = $this->getPayload($message)) {
-            $response = $this->getHttpClient()->post($this->getWebhook(), [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-                'body' => $payload,
-            ]);
+            $response = $this->getHttpClient()
+                ->post($this->getWebhook(), [
+                    'headers' => ['Content-Type' => 'application/json'],
+                    'body' => $payload,
+                ]);
 
             return 200 === $response->getStatusCode();
         }
