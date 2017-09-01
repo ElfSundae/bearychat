@@ -299,6 +299,32 @@ class MessageTest extends TestCase
         ], $message->toArray());
     }
 
+    public function testContent()
+    {
+        $message = new Message;
+        $message->content('text');
+        $this->assertEquals('text', $message->getText());
+
+        $message->content('text', false, 'note');
+        $this->assertEquals('text', $message->getText());
+        $this->assertFalse($message->getMarkdown());
+        $this->assertEquals('note', $message->getNotification());
+
+        $message = new Message;
+        $message->content('text', 'attachment_text', 'attachment_title', 'image', '#fff');
+        $this->assertEquals([
+            'text' => 'text',
+            'attachments' => [[
+                'text' => 'attachment_text',
+                'title' => 'attachment_title',
+                'images' => [
+                    ['url' => 'image']
+                ],
+                'color' => '#fff',
+            ]],
+        ], $message->toArray());
+    }
+
     public function testSend()
     {
         $this->assertFalse((new Message)->send());
