@@ -358,7 +358,10 @@ class Message implements JsonSerializable
      */
     public function setAttachmentDefaults($defaults)
     {
-        $this->attachmentDefaults = (array) $defaults;
+        if ($this->attachmentDefaults != ($defaults = (array) $defaults)) {
+            $this->attachmentDefaults = $defaults;
+            $this->setAttachments($this->attachments);
+        }
 
         return $this;
     }
@@ -579,48 +582,54 @@ class Message implements JsonSerializable
      */
     public function configureDefaults(array $defaults, $force = false)
     {
-        if (! $force && ! empty($this->toArray())) {
-            return $this;
-        }
+        if ($force || empty($this->toArray())) {
+            $attachmentDefaults = $this->attachmentDefaults;
 
-        $attachmentDefaults = $this->attachmentDefaults;
-
-        foreach (MessageDefaults::allKeys() as $key) {
-            if (! isset($defaults[$key]) || is_null($value = $defaults[$key])) {
-                continue;
-            }
-
-            if (strpos($key, 'attachment_') !== false) {
-                if ($key = substr($key, strlen('attachment_'))) {
-                    $attachmentDefaults[$key] = $value;
-                }
-            } else {
-                if (! is_null($this->getTarget()) &&
-                    ($key == MessageDefaults::USER || $key == MessageDefaults::CHANNEL)
-                ) {
-                    continue;
-                }
-
-                if ($suffix = $this->studlyCase($key)) {
-                    $getMethod = 'get'.$suffix;
-                    $setMethod = 'set'.$suffix;
-                    if (
-                        method_exists($this, $getMethod) &&
-                        is_null($this->{$getMethod}()) &&
-                        method_exists($this, $setMethod)
-                    ) {
-                        $this->{$setMethod}($value);
+            foreach (MessageDefaults::allKeys() as $key) {
+                if (isset($defaults[$key]) && ! is_null($value = $defaults[$key])) {
+                    if (strpos($key, 'attachment_') !== false) {
+                        if ($key = substr($key, strlen('attachment_'))) {
+                            $attachmentDefaults[$key] = $value;
+                        }
+                    } else {
+                        $this->fillDefaults($key, $value);
                     }
                 }
             }
-        }
 
-        if ($attachmentDefaults != $this->attachmentDefaults) {
-            $this->attachmentDefaults = $attachmentDefaults;
-            $this->setAttachments($this->attachments);
+            $this->setAttachmentDefaults($attachmentDefaults);
         }
 
         return $this;
+    }
+
+    /**
+     * Fill with message defaults.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return void
+     */
+    protected function fillDefaults($key, $value)
+    {
+        if (
+            ($key === MessageDefaults::USER || $key === MessageDefaults::CHANNEL) &&
+            (! is_null($this->getTarget()))
+        ) {
+            return;
+        }
+
+        if ($suffix = $this->studlyCase($key)) {
+            $getMethod = 'get'.$suffix;
+            $setMethod = 'set'.$suffix;
+            if (
+                method_exists($this, $getMethod) &&
+                is_null($this->{$getMethod}()) &&
+                method_exists($this, $setMethod)
+            ) {
+                $this->{$setMethod}($value);
+            }
+        }
     }
 
     /**

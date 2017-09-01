@@ -195,6 +195,14 @@ class MessageTest extends TestCase
         $message = (new Message)->setAttachmentDefaults(['text' => 'foo', 'color' => '#fff']);
         $message->addAttachment('bar');
         $this->assertEquals([['text' => 'bar', 'color' => '#fff']], $message->getAttachments());
+
+        $message = (new Message)
+            ->setAttachmentDefaults(['foo' => 'bar'])
+            ->add('text');
+        $message->setAttachmentDefaults(['foo' => 'abc']);
+        $this->assertEquals([['text' => 'text', 'foo' => 'bar']], $message->getAttachments());
+        $message->setAttachmentDefaults(['color' => '#abc']);
+        $this->assertEquals([['text' => 'text', 'foo' => 'bar', 'color' => '#abc']], $message->getAttachments());
     }
 
     public function testSetAttachments()
