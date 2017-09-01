@@ -213,7 +213,7 @@ class MessageTest extends TestCase
         $this->assertEquals([['text' => 'foo'], ['text' => 'bar']], $message->getAttachments());
     }
 
-    public function testArrayable()
+    public function testArrayableAndJsonable()
     {
         $this->assertInternalType('array', (new Message)->toArray());
 
@@ -225,6 +225,10 @@ class MessageTest extends TestCase
                 ['text' => 'bar'],
             ],
         ], $message->toArray());
+
+        $this->assertInternalType('string', $json = json_encode($message));
+        $this->assertEquals($json, $message->toJson());
+        $this->assertEquals($json, (string) $message);
     }
 
     public function testCreateMessageWithDefaultsFromClient()
@@ -264,6 +268,26 @@ class MessageTest extends TestCase
 
         $message->configureDefaults(['notification' => 'notes'], true);
         $this->assertEquals(['user' => 'elf', 'notification' => 'notes'], $message->toArray());
+
+        $message->add('text', 'title');
+        $this->assertEquals([
+            'user' => 'elf',
+            'notification' => 'notes',
+            'attachments' => [[
+                'text' => 'text',
+                'title' => 'title',
+            ]],
+        ], $message->toArray());
+        $message->configureDefaults(['attachment_color' => '#fff'], true);
+        $this->assertEquals([
+            'user' => 'elf',
+            'notification' => 'notes',
+            'attachments' => [[
+                'text' => 'text',
+                'title' => 'title',
+                'color' => '#fff',
+            ]],
+        ], $message->toArray());
     }
 
     public function testSend()
