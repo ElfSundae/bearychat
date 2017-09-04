@@ -85,7 +85,7 @@ class Message implements JsonSerializable
     /**
      * Set the BearyChat Client instance.
      *
-     * @param  \ElfSundae\BearyChat\Client  $client
+     * @param  \ElfSundae\BearyChat\Client|null  $client
      * @return $this
      */
     public function setClient($client)
