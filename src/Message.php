@@ -69,9 +69,7 @@ class Message implements JsonSerializable
      */
     public function __construct(Client $client = null)
     {
-        if ($this->client = $client) {
-            $this->configureDefaults($client->getMessageDefaults(), true);
-        }
+        $this->setClient($client);
     }
 
     /**
@@ -82,6 +80,23 @@ class Message implements JsonSerializable
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set the BearyChat Client instance.
+     *
+     * @param  \ElfSundae\BearyChat\Client  $client
+     * @return $this
+     */
+    public function setClient($client)
+    {
+        if ($client instanceof Client && $this->client != $client) {
+            $this->configureDefaults($client->getMessageDefaults(), true);
+        }
+
+        $this->client = $client;
+
+        return $this;
     }
 
     /**

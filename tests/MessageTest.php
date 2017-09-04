@@ -521,6 +521,32 @@ class MessageTest extends TestCase
         ], $message->toArray());
     }
 
+    public function testSetClient()
+    {
+        $message = new Message;
+        $client = m::mock(Client::class)
+            ->shouldReceive('getMessageDefaults')
+            ->once()
+            ->andReturn(['user' => 'elf'])
+            ->mock();
+        $message->setClient($client);
+        $this->assertSame($client, $message->getClient());
+        $this->assertSame('elf', $message->getUser());
+
+        $message->setClient(null);
+        $this->assertNull($message->getClient());
+
+        $client = m::mock(Client::class)
+            ->shouldReceive('getMessageDefaults')
+            ->once()
+            ->andReturn(['user' => 'sundae', 'markdown' => false])
+            ->mock();
+        $message->setClient($client);
+        $this->assertSame($client, $message->getClient());
+        $this->assertSame('elf', $message->getUser());
+        $this->assertSame(false, $message->getMarkdown());
+    }
+
     protected function getClient($defaults = ['user' => 'elf', 'notification' => 'noti', 'attachment_color' => '#f00'])
     {
         return m::mock(Client::class)
