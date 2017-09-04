@@ -37,8 +37,8 @@ class Client
      */
     public function __construct($webhook = null, $messageDefaults = [], $httpClient = null)
     {
-        $this->webhook($webhook)
-            ->messageDefaults($messageDefaults);
+        $this->setWebhook($webhook);
+        $this->setMessageDefaults($messageDefaults);
         $this->httpClient = $httpClient;
     }
 
